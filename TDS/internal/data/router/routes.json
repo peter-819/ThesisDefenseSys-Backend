@@ -1,0 +1,30 @@
+{
+  "menu":[
+    {
+      "name":"home",
+      "path":"/",
+      "component":"@/views/HomeView.vue",
+      "meta": { "roles": ["admin"] },
+      "children": [
+        {
+          "name":"MySchedule",
+          "path":"MySchedule",
+          "Component":"@/views/contents/myschedule.vue",
+          "meta": { "roles": ["admin"] }
+        },
+        {
+          "name":"Arrangement",
+          "path":"Arrangement",
+          "Component":"@/views/contents/arrangement.vue",
+          "meta": { "roles": ["admin"] }
+        },
+        {
+          "name":"Preference",
+          "path":"Preference",
+          "Component":"@/views/contents/preference.vue",
+          "meta": { "roles": ["admin"] }
+        }
+      ]
+    }
+  ]
+}

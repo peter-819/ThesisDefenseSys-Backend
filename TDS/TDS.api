@@ -1,12 +1,76 @@
-type Request {
-	Name string `path:"name,options=you|me"`
-}
+type (
+	LoginReq {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
 
-type Response {
-	Message string `json:"message"`
+	LoginReply {
+		ErrorCode int    `json:"errorcode,default=0"`
+		Message   string `json:"message"`
+		Token     string `json:"token,default=''"`
+	}
+)
+
+type (
+	RegisterReq {
+		Username string `json:"username"`
+		Password string `json:"password"`
+		Role     string `json:"role"`
+	}
+
+	RegisterReply {
+		ErrorCode int    `json:"errorcode,default=0"`
+		Message   string `json:"message"`
+	}
+)
+
+type (
+	MetaType {
+		Roles []string `json:"roles"`
+	}
+	RouteMenuReq {
+		Username string `json:"username"`
+	}
+	RouteMenuItem {
+		Name      string          `json:"name"`
+		Path      string          `json:"path"`
+		Component string          `json:"component"`
+		Meta      MetaType        `json:"meta"`
+		Children  []RouteMenuItem `json:"children,optional"`
+	}
+	RouteMenuReply {
+		Menu []RouteMenuItem `json:"menu"`
+	}
+)
+
+type (
+	HeaderItem {
+		Name       string `json:"name"`
+		RouterName string `json:"routername"`
+	}
+	HeaderReply {
+		Headers []HeaderItem `json:"headers"`
+	}
+	HeaderReq {
+	}
+)
+
+@server(
+	jwt: Auth
+)
+service TDS-api {
+	@handler routemenu
+	get /route/menu returns (RouteMenuReply)
+	
+	@handler routeheader
+	get /route/header (HeaderReq) returns (HeaderReply)
 }
 
 service TDS-api {
-	@handler TDSHandler
-	get /from/:name(Request) returns (Response)
+	@handler login
+	post /user/login (LoginReq) returns (LoginReply)
+	
+	@handler register
+	post /user/register (RegisterReq) returns (RegisterReply)
+	
 }

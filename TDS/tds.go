@@ -10,11 +10,13 @@ import (
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
+	"TDS-backend/TDS/internal/data"
 )
 
 var configFile = flag.String("f", "etc/tds-api.yaml", "the config file")
 
 func main() {
+	go serverdata.GetServerData()
 	flag.Parse()
 
 	var c config.Config

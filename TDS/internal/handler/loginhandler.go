@@ -9,16 +9,16 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func TDSHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func loginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.Request
+		var req types.LoginReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.Error(w, err)
 			return
 		}
 
-		l := logic.NewTDSLogic(r.Context(), svcCtx)
-		resp, err := l.TDS(req)
+		l := logic.NewLoginLogic(r.Context(), svcCtx)
+		resp, err := l.Login(req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

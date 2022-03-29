@@ -14,8 +14,29 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodGet,
-				Path:    "/from/:name",
-				Handler: TDSHandler(serverCtx),
+				Path:    "/route/menu",
+				Handler: routemenuHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/route/header",
+				Handler: routeheaderHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/user/login",
+				Handler: loginHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/user/register",
+				Handler: registerHandler(serverCtx),
 			},
 		},
 	)
