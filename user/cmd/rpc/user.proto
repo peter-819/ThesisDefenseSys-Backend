@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package user;
+option go_package = "./user";
+
+message IdRequest {
+    string id = 1;
+}
+
+message UserResponse {
+    // 用户id
+    string id = 1;
+    // 用户名称
+    string name = 2;
+    // 用户角色
+    string role = 3;
+    // 用户密码
+    string password = 4;
+}
+
+message TokenRequest {
+    string id = 1;
+    string role = 2;
+    string secret_key = 3;
+    int64 expire_time = 4;
+}
+
+message TokenResponse {
+    string token = 1;
+}
+
+message RegisterRequest {
+    string id = 1;
+    string name = 2;
+    string role = 3;
+    string password = 4;
+}
+
+message RegisterResponse {
+    string id = 1;
+}
+
+message RegisterBatchRequest {
+    repeated RegisterRequest list = 1;
+}
+
+message RegisterBatchResponse {
+    int32 successCount = 1;
+}
+service User {
+    rpc getUser(IdRequest) returns(UserResponse);
+    rpc getToken(TokenRequest) returns(TokenResponse);
+    rpc Register(RegisterRequest) returns(RegisterResponse);
+    rpc RegisterBatch(RegisterBatchRequest) returns(RegisterBatchResponse);
+}

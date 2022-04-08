@@ -1,0 +1,86 @@
+version: '3'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  etcd:
+    image: 'bitnami/etcd:latest'
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+    expose:
+      - "2379"
+      - "2380"
+    networks:
+      - app-tier
+
+  user_rpc:
+    container_name: user_rpc_container
+    networks:
+      - app-tier
+    image: user_rpc:v1
+    restart: always
+    expose:
+      - "9001"
+      
+  excel_rpc:
+    container_name: excel_rpc_container
+    networks:
+      - app-tier
+    image: excel_rpc:v1
+    restart: always
+    expose:
+      - "9002"
+
+  route_api:
+    container_name: route_api_container
+    networks:
+      - app-tier
+    image: route_api:v1
+    restart: always
+    expose:
+      - "8890"
+      
+  user_api:
+    container_name: user_api_container
+    networks:
+      - app-tier
+    image: user_api:v1
+    restart: always
+    expose:
+      - "8889"
+    
+  admin_api:
+    container_name: admin_api_container
+    networks:
+      - app-tier
+    image: admin_api:v1
+    restart: always
+    expose:
+      - "8891"
+
+  schedule_api:
+    container_name: schedule_api_container
+    networks:
+      - app-tier
+    image: schedule_api:v1
+    restart: always
+    expose:
+      - "8892"
+
+  nginx-gateway:
+    image: nginx:1.21.5
+    container_name: nginx-gateway
+    restart: always
+    privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - 8888:8081
+    volumes:
+      - ./deploy/nginx/conf.d:/etc/nginx/conf.d
+      - ./data/nginx/log:/var/log/nginx
+    networks:
+      - app-tier

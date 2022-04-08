@@ -1,0 +1,9 @@
+Name: user.rpc
+ListenOn: 0.0.0.0:9001
+Mongodb:
+  DataSource: mongodb+srv://jeromeguan:guanhaobo123@cluster0.n12rm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+  DatabaseName: test
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: user.rpc

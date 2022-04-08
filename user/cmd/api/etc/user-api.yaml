@@ -1,0 +1,16 @@
+Name: user-api
+Host: 0.0.0.0
+Port: 8889
+
+Mongodb:
+  DataSource: mongodb+srv://jeromeguan:guanhaobo123@cluster0.n12rm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+  DatabaseName: test
+UserRpc:
+  Etcd:
+    Hosts:
+    - etcd:2379
+    Key: user.rpc
+
+Auth:
+  AccessSecret: TDS-secret-key
+  AccessExpire: 86400

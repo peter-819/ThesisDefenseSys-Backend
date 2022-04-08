@@ -1,0 +1,41 @@
+type (
+	MetaType {
+		Roles []string `json:"roles"`
+	}
+	RouteMenuReq {
+		Username string `json:"username"`
+	}
+	RouteMenuItem {
+		Name      string          `json:"name"`
+		Path      string          `json:"path"`
+		Component string          `json:"component"`
+		Meta      MetaType        `json:"meta"`
+		Children  []RouteMenuItem `json:"children,optional"`
+	}
+	RouteMenuReply {
+		Menu []RouteMenuItem `json:"menu"`
+	}
+)
+
+type (
+	HeaderItem {
+		Name       string `json:"name"`
+		RouterName string `json:"routername"`
+	}
+	HeaderReply {
+		Headers []HeaderItem `json:"headers"`
+	}
+	HeaderReq {
+	}
+)
+
+@server(
+	jwt: Auth
+)
+service route-api {
+	@handler routemenu
+	get /route/menu returns (RouteMenuReply)
+	
+	@handler routeheader
+	get /route/header (HeaderReq) returns (HeaderReply)
+}

@@ -1,0 +1,48 @@
+type (
+	TSchedule {
+		ID        string `json:"id"`
+		Name      string `json:"name"`
+		StartTime string `json:"start_time"`
+		EndTime   string `json:"end_time"`
+	}
+	GetTScheduleReq {
+	}
+	GetTScheduleReply {
+		Schedules []TSchedule `json:"schedules"`
+	}
+
+	SetTScheduleReq {
+		Schedules []TSchedule `json:"schedules"`
+	}
+	SetTScheduleReply {
+	}
+)
+
+type (
+	DSchedule {
+		Name      string `json:"name"`
+		Classroom string `json:"classroom"`
+		StartTime string `json:"start_time"`
+		EndTime   string `json:"end_time"`
+	}
+	GetDScheduleReq {
+		Schedules []DSchedule `json:"schedules"`
+	}
+	GetDScheduleReply {
+		Schedules []DSchedule `json:"schedules"`
+	}
+)
+
+@server(
+	jwt: Auth
+)
+service Schedule-api {
+	@handler queryteacherschedule
+	get /schedule/teacher/query (GetTScheduleReq) returns (GetTScheduleReply)
+	
+	@handler setteacherschedule
+	post /schedule/teacher/set (SetTScheduleReq) returns (SetTScheduleReply)
+	
+	@handler querydefenseschedule
+	get /schedule/defense/query (GetDScheduleReq) returns (GetDScheduleReply)
+}

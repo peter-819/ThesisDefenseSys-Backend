@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package excel;
+option go_package = "./excel";
+
+message ExcelInfo{
+    repeated int32 cols = 1;
+    int32 row_min = 2;
+    int32 row_max = 3;
+}
+message ExcelRequest {
+    ExcelInfo info = 3;
+    bytes file = 2;
+}
+
+message RowInfo{
+    repeated string elements = 1;
+}
+message ExcelResponse {
+    repeated RowInfo rows = 1;
+}
+service User {
+    rpc ParseExcel(stream ExcelRequest) returns(ExcelResponse);
+}

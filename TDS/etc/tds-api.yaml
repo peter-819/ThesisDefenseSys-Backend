@@ -1,8 +1,0 @@
-Name: TDS-api
-Host: 0.0.0.0
-Port: 8888
-Mongodb:
-  DataSource: mongodb+srv://jeromeguan:guanhaobo123@cluster0.n12rm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-Auth:
-  AccessSecret: TDS-secret-key
-  AccessExpire: 86400
