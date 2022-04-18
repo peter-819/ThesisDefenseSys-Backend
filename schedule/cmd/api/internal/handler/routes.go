@@ -14,18 +14,43 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodGet,
-				Path:    "/schedule/teacher/query",
-				Handler: queryteacherscheduleHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPost,
-				Path:    "/schedule/teacher/set",
-				Handler: setteacherscheduleHandler(serverCtx),
+				Path:    "/schedule/defense/query/scholar/:id",
+				Handler: queryDefenseTeacherStudentHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/schedule/defense/query",
-				Handler: querydefensescheduleHandler(serverCtx),
+				Path:    "/schedule/defense/query/id/:id",
+				Handler: queryDefenseHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/schedule/defense/query/all",
+				Handler: queryAllDefenseHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/schedule/defense/add",
+				Handler: addDefenseHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/schedule/defense/modify",
+				Handler: ModifyDefenseHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/schedule/defense/remove",
+				Handler: RemoveDefenseHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/schedule/defense/available/classroom/:id",
+				Handler: QueryAvailableClassroomsHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/schedule/defense/available/teacher/:id",
+				Handler: QueryAvailableTeachersHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),

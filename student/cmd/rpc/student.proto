@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package student;
+option go_package = "./student";
+message EmptyResponse{}
+message EmptyRequest{}
+
+message Student {
+    string id = 1;
+    string name = 2;
+    repeated string paper_keywords = 3;
+    string paper_title = 4;
+    string group_id = 5;
+    string mentor = 6;
+}
+
+message QueryStudentRequest {
+    string id = 1;
+}
+message QueryStudentResponse {
+    Student student = 1;
+}
+
+message QueryStudentsResponse { 
+    repeated Student list = 1;
+}
+
+message ModifyStudentRequest {
+    string id = 1;
+    Student new_student = 2;
+}
+
+message RemoveStudentRequest {
+    string id = 1;
+}
+
+message AddStudentRequest {
+    Student student = 1;
+}
+
+message Group {
+    string id = 1;
+    string name = 2;
+    string defense_id = 3;
+    repeated string members = 4;
+}
+message NewGroupRequest {
+    string name = 1;
+}
+message NewGroupResponse {
+    string id = 1;
+}
+message QueryGroupRequest {
+    string group_id = 1;
+}
+message ModifyGroupRequest {
+    string id = 1;
+    Group new_group = 2;
+}
+message QueryGroupsResponse {
+    repeated Group groups = 1;
+}
+
+message QueryGroupContentResponse {
+    repeated string keywords = 1;
+    repeated string mentors = 2;
+}
+message QueryStudentsBatchRequest {
+    repeated string ids = 1;
+}
+
+
+service StudentService {
+    rpc AddStudent(AddStudentRequest) returns(EmptyResponse);
+    rpc RemoveStudent(RemoveStudentRequest) returns(EmptyResponse);
+    rpc ModifyStudent(ModifyStudentRequest) returns(EmptyResponse);
+    rpc QueryAllStudents(EmptyRequest) returns(QueryStudentsResponse);
+    rpc QueryStudent(QueryStudentRequest) returns(QueryStudentResponse);
+    rpc QueryNongroupedStudents(EmptyRequest) returns(QueryStudentsResponse);
+    rpc QueryStudentsBatch(QueryStudentsBatchRequest) returns(QueryStudentsResponse);
+
+    rpc NewGroup(NewGroupRequest) returns(NewGroupResponse);
+    rpc QueryGroup(QueryGroupRequest) returns(Group);
+    rpc QueryAllGroups(EmptyRequest) returns(QueryGroupsResponse);
+    rpc ModifyGroup(ModifyGroupRequest) returns(EmptyResponse);
+    rpc RemoveGroup(QueryGroupRequest) returns(EmptyResponse);
+
+    rpc QueryGroupContent(QueryGroupRequest) returns(QueryGroupContentResponse);
+}

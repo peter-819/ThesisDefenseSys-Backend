@@ -21,8 +21,9 @@ message UserResponse {
 message TokenRequest {
     string id = 1;
     string role = 2;
-    string secret_key = 3;
-    int64 expire_time = 4;
+    bool is_secretary = 3;
+    string secret_key = 4;
+    int64 expire_time = 5;
 }
 
 message TokenResponse {
@@ -47,9 +48,33 @@ message RegisterBatchRequest {
 message RegisterBatchResponse {
     int32 successCount = 1;
 }
+
+message TeacherInfo {
+    string Name = 1;
+    string Id = 2;
+    string IsSecretary = 3; 
+}
+message GetTeacherListRequest {}
+message GetTeacherListResponse {
+    repeated TeacherInfo list = 1;
+}
+
+message GetTeacherByIdRequest {
+    string id = 1;
+}
+message SetTeacherInfoRequest {
+    string id = 1;
+    TeacherInfo info = 2;
+}
+message SetTeacherInfoResponse{}
+
 service User {
     rpc getUser(IdRequest) returns(UserResponse);
     rpc getToken(TokenRequest) returns(TokenResponse);
     rpc Register(RegisterRequest) returns(RegisterResponse);
     rpc RegisterBatch(RegisterBatchRequest) returns(RegisterBatchResponse);
+
+    rpc getTeacherList(GetTeacherListRequest) returns(GetTeacherListResponse);    
+    rpc getTeacher(GetTeacherByIdRequest) returns(TeacherInfo);
+    rpc setTeacherInfo(SetTeacherInfoRequest) returns(SetTeacherInfoResponse);
 }

@@ -1,0 +1,35 @@
+type (
+	Classroom {
+		ID        string `json:"id,optional"`
+		Location  string `json:"location"`
+		Name      string `json:"name"`
+		StartTime string `json:"start_time"`
+		EndTime   string `json:"end_time"`
+	}
+	QueryClassroomReq {
+		Id string `path:"id"`
+	}
+	QueryClassroomsReply {
+		Classrooms []Classroom `json:"classrooms"`
+	}
+	RemoveClassroomReq {
+		Id string `path:"id"`
+	}
+)
+
+@server(
+	jwt: Auth
+)
+service Classroom-api {
+	@handler ImportClassrooms
+	post /classroom/import/excel
+	
+	@handler QueryAllClassrooms
+	get /classroom/query/all returns (QueryClassroomsReply)
+	
+	@handler QueryClassroom
+	get /classroom/query/:id (QueryClassroomReq) returns (Classroom)
+	
+	@handler RemoveClassroom
+	get /classroom/remove/:id (RemoveClassroomReq)
+}

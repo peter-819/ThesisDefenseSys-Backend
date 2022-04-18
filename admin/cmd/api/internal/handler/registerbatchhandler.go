@@ -65,7 +65,6 @@ func parseRegisterInfo(r *http.Request, info *logic.RegisterInfo) {
 			info.RowMax = vint
 		}
 	}
-	
 }
 func registerbatchHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

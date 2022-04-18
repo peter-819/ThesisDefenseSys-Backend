@@ -32,6 +32,7 @@ func (l *GetTokenLogic) GetToken(in *user.TokenRequest) (*user.TokenResponse, er
 	claims["iat"] = now
 	claims["id"] = in.Id
 	claims["role"] = in.Role
+	claims["is_secretary"] = in.IsSecretary
 	token := jwt.New(jwt.SigningMethodHS256)
 	token.Claims = claims
 	

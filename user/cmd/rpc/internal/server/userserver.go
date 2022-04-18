@@ -41,3 +41,18 @@ func (s *UserServer) RegisterBatch(ctx context.Context, in *user.RegisterBatchRe
 	l := logic.NewRegisterBatchLogic(ctx, s.svcCtx)
 	return l.RegisterBatch(in)
 }
+
+func (s *UserServer) GetTeacherList(ctx context.Context, in *user.GetTeacherListRequest) (*user.GetTeacherListResponse, error) {
+	l := logic.NewGetTeacherListLogic(ctx, s.svcCtx)
+	return l.GetTeacherList(in)
+}
+
+func (s *UserServer) GetTeacher(ctx context.Context, in *user.GetTeacherByIdRequest) (*user.TeacherInfo, error) {
+	l := logic.NewGetTeacherLogic(ctx, s.svcCtx)
+	return l.GetTeacher(in)
+}
+
+func (s *UserServer) SetTeacherInfo(ctx context.Context, in *user.SetTeacherInfoRequest) (*user.SetTeacherInfoResponse, error) {
+	l := logic.NewSetTeacherInfoLogic(ctx, s.svcCtx)
+	return l.SetTeacherInfo(in)
+}

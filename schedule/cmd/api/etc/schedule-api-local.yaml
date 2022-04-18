@@ -1,0 +1,28 @@
+Name: Schedule-api
+Host: 0.0.0.0
+Port: 8892
+
+Mongodb:
+  DataSource: mongodb+srv://jeromeguan:guanhaobo123@cluster0.n12rm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+  DatabaseName: test
+Auth:
+  AccessSecret: TDS-secret-key
+  AccessExpire: 86400
+
+ClassroomRpc:
+  Etcd:
+    Hosts:
+    - 127.0.0.1:2379
+    Key: classroom.rpc
+
+TeacherRpc:
+  Etcd:
+    Hosts:
+    - 127.0.0.1:2379
+    Key: teacher.rpc
+
+StudentRpc:
+  Etcd:
+    Hosts:
+    - 127.0.0.1:2379
+    Key: student.rpc

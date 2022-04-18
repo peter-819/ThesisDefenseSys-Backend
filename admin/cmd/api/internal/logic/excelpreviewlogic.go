@@ -30,7 +30,7 @@ func NewExcelpreviewLogic(ctx context.Context, svcCtx *svc.ServiceContext) Excel
 
 func (l *ExcelpreviewLogic) Excelpreview() (resp *types.ExcelPreviewReply, err error) {
 	resp = &types.ExcelPreviewReply{}
-	if l.ctx.Value("role") != "Admin" {
+	if l.ctx.Value("role").(string) != "Admin" && (!l.ctx.Value("is_secretary").(bool)) {
 		return resp, errorx.NewDefaultError("没有权限")
 	}
 	file, err := l.Files[0].Open()

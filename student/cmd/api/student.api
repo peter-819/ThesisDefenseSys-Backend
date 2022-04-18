@@ -1,0 +1,83 @@
+type (
+	Student {
+		Id            string   `json:"id"`
+		Name          string   `json:"name"`
+		PaperKeywords []string `json:"paper_keywords"`
+		PaperTitle    string   `json:"paper_title"`
+		GroupId       string   `json:"group_id"`
+		Mentor        string   `json:"mentor"`
+	}
+	// QueryStudentReq {
+	// 	Id string `path:"id"`
+	// }
+	QueryStudentsReply {
+		Students []Student `json:"students"`
+	}
+	RemoveStudentReq {
+		Id string `path:"id"`
+	}
+)
+
+type (
+	Group {
+		Id        string   `json:"id"`
+		Name      string   `json:"name"`
+		DefenseId string   `json:"defense_id"`
+		Members   []string `json:"members"`
+	}
+
+	NewGroupReq {
+		Name string `path:"name"`
+	}
+	NewGroupResp {
+		GroupId string `json:"group_id"`
+	}
+	AddMemberReq {
+		StudentId string `path:"student_id"`
+		GroupId   string `path:"group_id"`
+	}
+	RemoveMemberReq {
+		StudentId string `path:"student_id"`
+		GroupId   string `path:"group_id"`
+	}
+	QueryGroupReq {
+		Id string `path:"id"`
+	}
+	RemoveGroupReq {
+		Id string `path:"id"`
+	}
+	QueryGroupContentResp {
+		Keywords []string `json:"keywords"`
+		Mentors  []string `json:"mentors"`
+	}
+)
+@server(
+	jwt: Auth
+)
+service Student-api {
+	@handler QueryAllStudents
+	get /student/query/all returns (QueryStudentsReply)
+	@handler QueryNongroupedStudents
+	get /student/query/nongrouped returns (QueryStudentsReply)
+	
+	@handler ImportExcel
+	post /student/import/excel returns (QueryStudentsReply)
+	
+	@handler RemoveStudent
+	get /student/remove/:id (RemoveStudentReq)
+	
+	@handler NewGroup
+	get /student/group/new/:name (NewGroupReq) returns (NewGroupResp)
+	@handler AddMember
+	get /student/group/add/member/:group_id/:student_id (AddMemberReq)
+	@handler RemoveMember
+	get /student/group/remove/member/:group_id/:student_id (RemoveMemberReq)
+	@handler QueryGroup
+	get /student/group/query/:id (QueryGroupReq) returns (Group)
+	@handler RemoveGroup
+	get /student/group/remove/:id (RemoveGroupReq)
+	@handler QueryGroupContent
+	get /student/group/query/content/:id (QueryGroupReq) returns (QueryGroupContentResp)
+	@handler QueryGroupStudents
+	get /student/group/query/students/:id (QueryGroupReq) returns (QueryStudentsReply)
+}

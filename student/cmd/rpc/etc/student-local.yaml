@@ -1,0 +1,10 @@
+Name: student.rpc
+ListenOn: 0.0.0.0:9005
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: student.rpc
+
+Mongodb:
+  DataSource: mongodb+srv://jeromeguan:guanhaobo123@cluster0.n12rm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+  DatabaseName: test

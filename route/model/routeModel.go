@@ -33,7 +33,7 @@ func (m *RouteModel)GetMenu(menu interface{}) error {
 		{"name", "RouteMenu"},
 	}).Decode(menu)
 	if find_err != nil {
-		return errorx.NewDefaultError("数据库错误")
+		return errorx.NewDefaultError("数据库错误: " + find_err.Error())
 	}
 	return nil
 }
@@ -45,7 +45,7 @@ func (m *RouteModel)GetHeader(role string, header interface{}) error{
 		{"role", role},
 	}).Decode(header)
 	if find_err != nil {
-		return errorx.NewDefaultError("数据库错误")
+		return errorx.NewDefaultError("数据库错误: " + find_err.Error())
 	}
 	return nil
 }

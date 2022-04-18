@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package classroom;
+option go_package = "./classroom";
+
+message EmptyRequest {}
+message EmptyResponse {}
+
+message Classroom {
+    string id = 1;
+    string location = 2;
+    string name = 3;
+    string start_time = 4;
+    string end_time = 5;
+}
+
+message QueryClassroomRequest {
+    string id = 1;
+}
+message QueryClassroomResponse {
+    Classroom classroom = 1;
+}
+
+message QueryClassroomsResponse {
+    repeated Classroom classrooms = 1;
+}
+
+message QueryByTimeRequest {
+    string start_time = 1;
+    string end_time = 2;
+}
+message RemoveClassroomRequest {
+    string id = 1;
+}
+service ClassroomService {
+    rpc QueryAllClassrooms(EmptyRequest) returns(QueryClassroomsResponse);
+    rpc QueryClassroom(QueryClassroomRequest) returns(Classroom);
+
+    rpc QueryAvailableByTime(QueryByTimeRequest) returns(QueryClassroomsResponse);
+    rpc RemoveClassroom(RemoveClassroomRequest) returns(EmptyResponse);
+}

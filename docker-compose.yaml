@@ -24,7 +24,9 @@ services:
     restart: always
     expose:
       - "9001"
-      
+    depends_on:
+      - etcd
+
   excel_rpc:
     container_name: excel_rpc_container
     networks:
@@ -33,6 +35,41 @@ services:
     restart: always
     expose:
       - "9002"
+    depends_on:
+      - etcd
+
+  teacher_rpc:
+    container_name: teacher_rpc_container
+    networks:
+      - app-tier
+    image: teacher_rpc:v1
+    restart: always
+    expose:
+      - "9003"
+    depends_on:
+      - etcd
+
+  classroom_rpc:
+    container_name: classroom_rpc_container
+    networks:
+      - app-tier
+    image: classroom_rpc:v1
+    restart: always
+    expose:
+      - "9004"
+    depends_on:
+      - etcd
+ 
+  student_rpc:
+    container_name: student_rpc_container
+    networks:
+      - app-tier
+    image: student_rpc:v1
+    restart: always
+    expose:
+      - "9005"
+    depends_on:
+      - etcd
 
   route_api:
     container_name: route_api_container
@@ -51,6 +88,8 @@ services:
     restart: always
     expose:
       - "8889"
+    depends_on:
+      - user_rpc
     
   admin_api:
     container_name: admin_api_container
@@ -60,6 +99,9 @@ services:
     restart: always
     expose:
       - "8891"
+    depends_on:
+      - excel_rpc
+      - user_rpc
 
   schedule_api:
     container_name: schedule_api_container
@@ -69,6 +111,43 @@ services:
     restart: always
     expose:
       - "8892"
+    depends_on:
+      - student_rpc
+      - classroom_rpc
+      - teacher_rpc
+
+  teacher_api:
+    container_name: teacher_api_container
+    networks:
+      - app-tier
+    image: teacher_api:v1
+    restart: always
+    expose:
+      - "8893"
+    depends_on:
+      - teacher_rpc
+  
+  classroom_api:
+    container_name: classroom_api_container
+    networks:
+      - app-tier
+    image: classroom_api:v1
+    restart: always
+    expose:
+      - "8894"
+    depends_on:
+      - classroom_rpc
+
+  student_api:
+    container_name: student_api_container
+    networks:
+      - app-tier
+    image: student_api:v1
+    restart: always
+    expose:
+      - "8895"
+    depends_on:
+      - student_rpc
 
   nginx-gateway:
     image: nginx:1.21.5

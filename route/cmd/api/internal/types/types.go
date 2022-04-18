@@ -14,6 +14,7 @@ type RouteMenuItem struct {
 	Path      string          `json:"path"`
 	Component string          `json:"component"`
 	Meta      MetaType        `json:"meta"`
+	Redirect  string          `json:"redirect, optional"`
 	Children  []RouteMenuItem `json:"children,optional"`
 }
 

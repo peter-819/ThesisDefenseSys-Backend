@@ -38,11 +38,22 @@ func (l *LoginLogic) Login(req types.LoginReq) (resp *types.LoginReply, err erro
 	if userInfo.Password != req.Password {
 		return nil, errorx.NewDefaultError("密码错误")
 	}
+	IsSecretary := false
+	if userInfo.Role == "Teacher" {
+		teacherInfo, err := l.svcCtx.UserRpc.GetTeacher(l.ctx, &user.GetTeacherByIdRequest{
+			Id: req.UserID,
+		})
+		if err != nil {
+			return nil, errorx.NewDefaultError("无教师信息")
+		}
+		IsSecretary = (teacherInfo.IsSecretary == "yes")
+	}
 	tokenRes, err := l.svcCtx.UserRpc.GetToken(l.ctx, &user.TokenRequest{
 		Id: userInfo.Id,
 		Role: userInfo.Role,
 		ExpireTime: l.svcCtx.Config.Auth.AccessExpire,
 		SecretKey: l.svcCtx.Config.Auth.AccessSecret,
+		IsSecretary: IsSecretary,
 	})
 	return &types.LoginReply{
 		Token: tokenRes.Token,

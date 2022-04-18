@@ -22,6 +22,23 @@ type (
 		Token string `json:"token,default=''"`
 	}
 )
+type (
+	TeacherInfo {
+		Name        string `json:"name,optional"`
+		Id          string `json:"id,optional"`
+		IsSecretary string `json:"is_secretary,options=yes|no|undefined,default=undefined"`
+	}
+	GetTeacherListReply {
+		List []TeacherInfo `json:"list"`
+	}
+)
+
+type (
+	SetTeacherInfoReq {
+		Id   string      `json:"id"`
+		Info TeacherInfo `json:"info"`
+	}
+)
 
 service user-api {
 	@handler login
@@ -29,4 +46,11 @@ service user-api {
 	
 	@handler register
 	post /user/register (RegisterReq) returns (RegisterReply)
+	
+	@handler getteacherlist
+	get /user/teacher/getlist returns (GetTeacherListReply)
+	
+	@handler setteacherinfo
+	post /user/teacher/set/info (SetTeacherInfoReq)
+	
 }

@@ -71,6 +71,7 @@ func (l *RegisterbatchLogic) Registerbatch() (resp *types.RegisterBatchReply, er
 	sort.SliceStable(pairs, func(i,j int) bool {
 		return pairs[i].Value < pairs[j].Value
 	})
+
 	stream.Send(&excel.ExcelRequest{
 		Info: &excel.ExcelInfo{
 			RowMin: l.Info.RowMin,

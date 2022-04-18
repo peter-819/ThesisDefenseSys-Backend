@@ -1,0 +1,22 @@
+Name: Student-api
+Host: 0.0.0.0
+Port: 8895
+
+StudentRpc:
+  Etcd:
+    Hosts:
+    - 127.0.0.1:2379
+    Key: student.rpc
+
+ExcelRpc:
+  Etcd:
+    Hosts:
+    - 127.0.0.1:2379
+    Key: excel.rpc
+
+Mongodb:
+  DataSource: mongodb+srv://jeromeguan:guanhaobo123@cluster0.n12rm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+  DatabaseName: test
+Auth:
+  AccessSecret: TDS-secret-key
+  AccessExpire: 86400

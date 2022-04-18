@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package teacher;
+option go_package = "./teacher";
+message EmptyResponse{}
+
+message Schedule {
+    string schedule_id = 1;
+    string name = 2;
+    string start_time = 3;
+    string end_time = 4;
+}
+message Teacher {
+    string id = 1;
+    string name = 2;
+    string is_secretary = 3;
+    int32 max_defense_per_week = 4;
+    repeated string prefer_keywords = 5;
+    repeated Schedule schedules = 6;
+}
+
+message QueryTeacherRequest {
+    string id = 1;
+}
+message QueryTeacherResponse {
+    Teacher teacher = 1;
+}
+
+message QueryAllTeacherRequest {
+}
+message QueryTeachersResponse { 
+    repeated Teacher list = 1;
+}
+
+message ModifyTeacherRequest {
+    string id = 1;
+    Teacher new_teacher = 2;
+}
+
+message RemoveTeacherRequest {
+    string id = 1;
+}
+
+message AddTeacherRequest {
+    Teacher teacher = 1;
+}
+
+message QueryAvailableTeachersRequest {
+    repeated string keywords = 1;
+    repeated string excluded = 2;
+    string start_time = 3;
+    string end_time = 4;
+}
+service TeacherService {
+    rpc AddTeacher(AddTeacherRequest) returns(EmptyResponse);
+    rpc RemoveTeacher(RemoveTeacherRequest) returns(EmptyResponse);
+    rpc ModifyTeacher(ModifyTeacherRequest) returns(EmptyResponse);
+    rpc QueryAllTeacher(QueryAllTeacherRequest) returns(QueryTeachersResponse);
+    rpc QueryTeacher(QueryTeacherRequest) returns(QueryTeacherResponse);
+
+    rpc QueryAvailableTeachers(QueryAvailableTeachersRequest) returns(QueryTeachersResponse);
+}

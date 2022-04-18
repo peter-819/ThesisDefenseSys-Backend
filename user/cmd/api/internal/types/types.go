@@ -21,3 +21,18 @@ type RegisterReq struct {
 type RegisterReply struct {
 	Token string `json:"token,default=''"`
 }
+
+type TeacherInfo struct {
+	Name        string `json:"name,optional"`
+	Id          string `json:"id,optional"`
+	IsSecretary string `json:"is_secretary,options=yes|no|undefined,default=undefined"`
+}
+
+type GetTeacherListReply struct {
+	List []TeacherInfo `json:"list"`
+}
+
+type SetTeacherInfoReq struct {
+	Id   string      `json:"id"`
+	Info TeacherInfo `json:"info"`
+}

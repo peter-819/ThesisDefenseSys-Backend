@@ -1,0 +1,16 @@
+type (
+	ImportExcelReply {
+		Count int `json:"count"`
+	}
+)
+@server(
+	jwt: Auth
+)
+service Excel-api {
+	@handler ImportStudent
+	post /excel/import/student returns (ImportExcelReply)
+	
+	@handler ImportClassrooms
+	post /excel/import/classroom returns (ImportExcelReply)
+	
+}
