@@ -16,6 +16,10 @@ type Defense struct {
 	GroupId           string   `json:"group_id,optional"`
 }
 
+type AddDefenseReply struct {
+	Id string `json:"id"`
+}
+
 type QueryDefenseReq struct {
 	Id string `path:"id"`
 }
@@ -31,6 +35,18 @@ type ModifyDefenseReq struct {
 
 type RemoveDefenseReq struct {
 	ID string `json:"id"`
+}
+
+type QueryAvailableReq struct {
+	Students  []string `json:"students"`
+	Committee []string `json:"committee"`
+	Classroom string   `json:"classroom"`
+}
+
+type QueryAvailableReply struct {
+	Students   []string      `json:"students"`
+	Committee  []TeacherInfo `json:"committee"`
+	Classrooms []string      `json:"classrooms"`
 }
 
 type QueryAvailableClassroomsReq struct {

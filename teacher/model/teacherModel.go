@@ -30,6 +30,7 @@ type ITeacherModel interface {
 	// ResetTeacherSchedule(id string, newSchedules []Schedule) error
 
 	QueryTeacher(id string) (*Teacher, error)
+	QueryAllTeachers() ([]Teacher, error)
 	ModifyTeacher(id string, teacher *Teacher) error
 	AddTeacher(teacher *Teacher) error
 	QueryAvailableTeachers(start time.Time, end time.Time, keywords []string, excluded []string) ([]Teacher, error)
@@ -121,17 +122,20 @@ func (m *TeacherModel) QueryAvailableTeachers(start time.Time, end time.Time, ke
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
-	filter := bson.M{
-		"prefer_keywords": bson.M{
+	filter := bson.M{}
+	if len(keywords) != 0 {
+		filter["prefer_keywords"] = bson.M{
 			"$elemMatch": bson.M{
 				"$in": keywords,
 			},
-		},
-		"id": bson.M{
+		}
+	}
+	if len(excluded) != 0 {
+		filter["id"] = bson.M{
 			"$not": bson.M{
 				"$in": excluded,
 			},
-		},
+		}
 	}
 	if !start.IsZero() && !end.IsZero() {
 		filter["schedules"] = bson.M{
@@ -155,6 +159,23 @@ func (m *TeacherModel) QueryAvailableTeachers(start time.Time, end time.Time, ke
 			},
 		}
 	}
+	cur, err := m.collection.Find(ctx, filter)
+	if err != nil {
+		return nil, errorx.NewDefaultError("数据库错误: " + err.Error())
+	}
+	var result []Teacher
+	err = cur.All(ctx, &result)
+	if err != nil {
+		return nil, errorx.NewDefaultError("数据库错误: " + err.Error())
+	}
+	return result, nil
+}
+
+func (m *TeacherModel) QueryAllTeachers() ([]Teacher, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	filter := bson.M{}
 	cur, err := m.collection.Find(ctx, filter)
 	if err != nil {
 		return nil, errorx.NewDefaultError("数据库错误: " + err.Error())

@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"fmt"
 
 	"TDS-backend/common/errorx"
 	"TDS-backend/student/cmd/api/internal/svc"
@@ -43,6 +44,7 @@ func (l *RemoveGroupLogic) RemoveGroup(req types.RemoveGroupReq) error {
 		if stuRes.Student.GroupId != req.Id {
 			return errorx.NewDefaultError("内部错误！")
 		}
+		fmt.Println(stuRes)
 		stuRes.Student.GroupId = ""
 		_, err = l.svcCtx.StudentRpc.ModifyStudent(l.ctx, &student.ModifyStudentRequest{
 			Id:         member,

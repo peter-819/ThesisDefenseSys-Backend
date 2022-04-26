@@ -53,6 +53,9 @@ message NewGroupResponse {
 message QueryGroupRequest {
     string group_id = 1;
 }
+message QueryStudentsContentRequest {
+    repeated string ids = 1;
+}
 message ModifyGroupRequest {
     string id = 1;
     Group new_group = 2;
@@ -86,4 +89,5 @@ service StudentService {
     rpc RemoveGroup(QueryGroupRequest) returns(EmptyResponse);
 
     rpc QueryGroupContent(QueryGroupRequest) returns(QueryGroupContentResponse);
+    rpc QueryStudentsContent(QueryStudentsContentRequest) returns(QueryGroupContentResponse);
 }

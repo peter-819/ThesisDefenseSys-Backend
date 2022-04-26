@@ -13,23 +13,24 @@ import (
 )
 
 type (
-	AddStudentRequest         = student.AddStudentRequest
-	EmptyRequest              = student.EmptyRequest
-	EmptyResponse             = student.EmptyResponse
-	Group                     = student.Group
-	ModifyGroupRequest        = student.ModifyGroupRequest
-	ModifyStudentRequest      = student.ModifyStudentRequest
-	NewGroupRequest           = student.NewGroupRequest
-	NewGroupResponse          = student.NewGroupResponse
-	QueryGroupContentResponse = student.QueryGroupContentResponse
-	QueryGroupRequest         = student.QueryGroupRequest
-	QueryGroupsResponse       = student.QueryGroupsResponse
-	QueryStudentRequest       = student.QueryStudentRequest
-	QueryStudentResponse      = student.QueryStudentResponse
-	QueryStudentsBatchRequest = student.QueryStudentsBatchRequest
-	QueryStudentsResponse     = student.QueryStudentsResponse
-	RemoveStudentRequest      = student.RemoveStudentRequest
-	Student                   = student.Student
+	AddStudentRequest           = student.AddStudentRequest
+	EmptyRequest                = student.EmptyRequest
+	EmptyResponse               = student.EmptyResponse
+	Group                       = student.Group
+	ModifyGroupRequest          = student.ModifyGroupRequest
+	ModifyStudentRequest        = student.ModifyStudentRequest
+	NewGroupRequest             = student.NewGroupRequest
+	NewGroupResponse            = student.NewGroupResponse
+	QueryGroupContentResponse   = student.QueryGroupContentResponse
+	QueryGroupRequest           = student.QueryGroupRequest
+	QueryGroupsResponse         = student.QueryGroupsResponse
+	QueryStudentRequest         = student.QueryStudentRequest
+	QueryStudentResponse        = student.QueryStudentResponse
+	QueryStudentsBatchRequest   = student.QueryStudentsBatchRequest
+	QueryStudentsContentRequest = student.QueryStudentsContentRequest
+	QueryStudentsResponse       = student.QueryStudentsResponse
+	RemoveStudentRequest        = student.RemoveStudentRequest
+	Student                     = student.Student
 
 	StudentService interface {
 		AddStudent(ctx context.Context, in *AddStudentRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
@@ -45,6 +46,7 @@ type (
 		ModifyGroup(ctx context.Context, in *ModifyGroupRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
 		RemoveGroup(ctx context.Context, in *QueryGroupRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
 		QueryGroupContent(ctx context.Context, in *QueryGroupRequest, opts ...grpc.CallOption) (*QueryGroupContentResponse, error)
+		QueryStudentsContent(ctx context.Context, in *QueryStudentsContentRequest, opts ...grpc.CallOption) (*QueryGroupContentResponse, error)
 	}
 
 	defaultStudentService struct {
@@ -121,4 +123,9 @@ func (m *defaultStudentService) RemoveGroup(ctx context.Context, in *QueryGroupR
 func (m *defaultStudentService) QueryGroupContent(ctx context.Context, in *QueryGroupRequest, opts ...grpc.CallOption) (*QueryGroupContentResponse, error) {
 	client := student.NewStudentServiceClient(m.cli.Conn())
 	return client.QueryGroupContent(ctx, in, opts...)
+}
+
+func (m *defaultStudentService) QueryStudentsContent(ctx context.Context, in *QueryStudentsContentRequest, opts ...grpc.CallOption) (*QueryGroupContentResponse, error) {
+	client := student.NewStudentServiceClient(m.cli.Conn())
+	return client.QueryStudentsContent(ctx, in, opts...)
 }

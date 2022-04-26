@@ -33,7 +33,7 @@ func DefenseJtoB(in *types.Defense) (out *model.Defense, err error) {
 	if err != nil {
 		return nil, errorx.NewDefaultError("答辩开始时间格式错误: " + err.Error())
 	}
-	end_time, err := timex.FStringToTime(in.StartTime)
+	end_time, err := timex.FStringToTime(in.EndTime)
 	if err != nil {
 		return nil, errorx.NewDefaultError("答辩开始时间格式错误: " + err.Error())
 	}

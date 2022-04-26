@@ -16,6 +16,9 @@ type (
 	QueryTeacherReq {
 		Id string `path:"id"`
 	}
+	QueryTeachersReq {
+		Teachers []Teacher `json:"teachers"`
+	}
 	ModifyTeacherReq {
 		Id         string  `json:"id"`
 		NewTeacher Teacher `json:"new_teacher"`
@@ -30,4 +33,7 @@ service Teacher-api {
 	
 	@handler ModifyTeacher
 	post /teacher/modify (ModifyTeacherReq)
+	@handler QueryAllTeachers
+	get /teacher/query/all returns (QueryTeachersReq)
+	
 }

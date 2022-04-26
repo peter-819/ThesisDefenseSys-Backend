@@ -31,6 +31,7 @@ type StudentServiceClient interface {
 	ModifyGroup(ctx context.Context, in *ModifyGroupRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
 	RemoveGroup(ctx context.Context, in *QueryGroupRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
 	QueryGroupContent(ctx context.Context, in *QueryGroupRequest, opts ...grpc.CallOption) (*QueryGroupContentResponse, error)
+	QueryStudentsContent(ctx context.Context, in *QueryStudentsContentRequest, opts ...grpc.CallOption) (*QueryGroupContentResponse, error)
 }
 
 type studentServiceClient struct {
@@ -158,6 +159,15 @@ func (c *studentServiceClient) QueryGroupContent(ctx context.Context, in *QueryG
 	return out, nil
 }
 
+func (c *studentServiceClient) QueryStudentsContent(ctx context.Context, in *QueryStudentsContentRequest, opts ...grpc.CallOption) (*QueryGroupContentResponse, error) {
+	out := new(QueryGroupContentResponse)
+	err := c.cc.Invoke(ctx, "/student.StudentService/QueryStudentsContent", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // StudentServiceServer is the server API for StudentService service.
 // All implementations must embed UnimplementedStudentServiceServer
 // for forward compatibility
@@ -175,6 +185,7 @@ type StudentServiceServer interface {
 	ModifyGroup(context.Context, *ModifyGroupRequest) (*EmptyResponse, error)
 	RemoveGroup(context.Context, *QueryGroupRequest) (*EmptyResponse, error)
 	QueryGroupContent(context.Context, *QueryGroupRequest) (*QueryGroupContentResponse, error)
+	QueryStudentsContent(context.Context, *QueryStudentsContentRequest) (*QueryGroupContentResponse, error)
 	mustEmbedUnimplementedStudentServiceServer()
 }
 
@@ -220,6 +231,9 @@ func (UnimplementedStudentServiceServer) RemoveGroup(context.Context, *QueryGrou
 }
 func (UnimplementedStudentServiceServer) QueryGroupContent(context.Context, *QueryGroupRequest) (*QueryGroupContentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryGroupContent not implemented")
+}
+func (UnimplementedStudentServiceServer) QueryStudentsContent(context.Context, *QueryStudentsContentRequest) (*QueryGroupContentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryStudentsContent not implemented")
 }
 func (UnimplementedStudentServiceServer) mustEmbedUnimplementedStudentServiceServer() {}
 
@@ -468,6 +482,24 @@ func _StudentService_QueryGroupContent_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _StudentService_QueryStudentsContent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryStudentsContentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StudentServiceServer).QueryStudentsContent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/student.StudentService/QueryStudentsContent",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StudentServiceServer).QueryStudentsContent(ctx, req.(*QueryStudentsContentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // StudentService_ServiceDesc is the grpc.ServiceDesc for StudentService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -526,6 +558,10 @@ var StudentService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "QueryGroupContent",
 			Handler:    _StudentService_QueryGroupContent_Handler,
+		},
+		{
+			MethodName: "QueryStudentsContent",
+			Handler:    _StudentService_QueryStudentsContent_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

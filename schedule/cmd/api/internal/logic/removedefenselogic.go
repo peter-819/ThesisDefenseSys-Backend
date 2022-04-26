@@ -2,7 +2,9 @@ package logic
 
 import (
 	"context"
+	"fmt"
 
+	"TDS-backend/common/errorx"
 	"TDS-backend/schedule/cmd/api/internal/svc"
 	"TDS-backend/schedule/cmd/api/internal/types"
 	"TDS-backend/student/cmd/rpc/types/student"
@@ -30,16 +32,37 @@ func (l *RemoveDefenseLogic) RemoveDefense(req types.RemoveDefenseReq) error {
 	if err != nil {
 		return err
 	}
-	groupRes, err := l.svcCtx.StudentRpc.QueryGroup(l.ctx, &student.QueryGroupRequest{
+
+	group, err := l.svcCtx.StudentRpc.QueryGroup(l.ctx, &student.QueryGroupRequest{
 		GroupId: defense.GroupId,
 	})
 	if err != nil {
 		return err
 	}
-	groupRes.DefenseId = ""
-	_, err = l.svcCtx.StudentRpc.ModifyGroup(l.ctx, &student.ModifyGroupRequest{
-		Id:       defense.GroupId,
-		NewGroup: groupRes,
+	fmt.Println(group)
+	for _, member := range group.Members {
+		stuRes, err := l.svcCtx.StudentRpc.QueryStudent(l.ctx, &student.QueryStudentRequest{
+			Id: member,
+		})
+		if err != nil {
+			return err
+		}
+		if stuRes.Student.GroupId != group.Id {
+			return errorx.NewDefaultError("内部错误！")
+		}
+		fmt.Println("remove student: ", stuRes)
+		stuRes.Student.GroupId = ""
+		_, err = l.svcCtx.StudentRpc.ModifyStudent(l.ctx, &student.ModifyStudentRequest{
+			Id:         member,
+			NewStudent: stuRes.Student,
+		})
+		if err != nil {
+			return err
+		}
+	}
+
+	_, err = l.svcCtx.StudentRpc.RemoveGroup(l.ctx, &student.QueryGroupRequest{
+		GroupId: defense.GroupId,
 	})
 	if err != nil {
 		return err

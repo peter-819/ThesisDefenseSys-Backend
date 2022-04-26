@@ -18,6 +18,10 @@ type RemoveStudentReq struct {
 	Id string `path:"id"`
 }
 
+type QueryStudentsContentReq struct {
+	Ids []string `json:"ids"`
+}
+
 type Group struct {
 	Id        string   `json:"id"`
 	Name      string   `json:"name"`

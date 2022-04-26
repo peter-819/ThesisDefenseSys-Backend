@@ -52,6 +52,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/schedule/defense/available/teacher/:id",
 				Handler: QueryAvailableTeachersHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/schedule/defense/available/all",
+				Handler: QueryAvailableHandler(serverCtx),
+			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)

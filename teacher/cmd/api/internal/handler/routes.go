@@ -22,6 +22,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/teacher/modify",
 				Handler: ModifyTeacherHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/teacher/query/all",
+				Handler: QueryAllTeachersHandler(serverCtx),
+			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)

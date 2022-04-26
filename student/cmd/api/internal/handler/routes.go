@@ -67,6 +67,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/student/group/query/students/:id",
 				Handler: QueryGroupStudentsHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/student/query/content",
+				Handler: QueryStudentsContentHandler(serverCtx),
+			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)

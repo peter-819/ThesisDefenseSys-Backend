@@ -21,6 +21,10 @@ type QueryTeacherReq struct {
 	Id string `path:"id"`
 }
 
+type QueryTeachersReq struct {
+	Teachers []Teacher `json:"teachers"`
+}
+
 type ModifyTeacherReq struct {
 	Id         string  `json:"id"`
 	NewTeacher Teacher `json:"new_teacher"`

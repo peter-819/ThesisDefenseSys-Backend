@@ -16,6 +16,10 @@ type (
 	RemoveStudentReq {
 		Id string `path:"id"`
 	}
+
+	QueryStudentsContentReq {
+		Ids []string `json:"ids"`
+	}
 )
 
 type (
@@ -80,4 +84,7 @@ service Student-api {
 	get /student/group/query/content/:id (QueryGroupReq) returns (QueryGroupContentResp)
 	@handler QueryGroupStudents
 	get /student/group/query/students/:id (QueryGroupReq) returns (QueryStudentsReply)
+	
+	@handler QueryStudentsContent
+	post /student/query/content  (QueryStudentsContentReq) returns (QueryGroupContentResp)
 }

@@ -30,15 +30,9 @@ func NewAddDefenseLogic(ctx context.Context, svcCtx *svc.ServiceContext) AddDefe
 	}
 }
 
-func (l *AddDefenseLogic) AddDefense(req types.Defense) error {
+func (l *AddDefenseLogic) AddDefense(req types.Defense) (resp *types.AddDefenseReply, err error) {
 	if req.GroupId == "" {
-		return errorx.NewDefaultError("学生组ID不可为空")
-	}
-	group, err := l.svcCtx.StudentRpc.QueryGroup(l.ctx, &student.QueryGroupRequest{
-		GroupId: req.GroupId,
-	})
-	if err != nil {
-		return err
+		return nil, errorx.NewDefaultError("学生组ID不可为空")
 	}
 
 	//classroom check
@@ -47,10 +41,10 @@ func (l *AddDefenseLogic) AddDefense(req types.Defense) error {
 		claRes, err := l.svcCtx.ClassroomRpc.QueryClassroom(l.ctx, &classroom.QueryClassroomRequest{
 			Id: classroomId,
 		})
-		fmt.Println("claRes: ", claRes)
 		if err != nil {
-			return errorx.NewDefaultError("非法教室ID: " + err.Error())
+			return nil, errorx.NewDefaultError("非法教室ID: " + err.Error())
 		}
+		fmt.Println("claRes: ", claRes)
 		req.ClassroomFullName = claRes.Location + " " + claRes.Name
 	}
 	// committee check
@@ -60,27 +54,37 @@ func (l *AddDefenseLogic) AddDefense(req types.Defense) error {
 			teaRes, err := l.svcCtx.TeacherRpc.QueryTeacher(l.ctx, &teacher.QueryTeacherRequest{
 				Id: teacherId,
 			})
-			fmt.Println("teaRes: ", teaRes.Teacher)
 			if err != nil {
-				return errorx.NewDefaultError("非法教师ID: " + err.Error())
+				return nil, errorx.NewDefaultError("非法教师ID: " + err.Error())
 			}
+			fmt.Println("teaRes: ", teaRes.Teacher)
 			req.Committee[index].TeacherName = teaRes.Teacher.Name
 		}
 	}
 
 	schedule, err := utils.DefenseJtoB(&req)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defenseId, err := l.svcCtx.DefenseModel.InsertDefense(schedule)
 	if err != nil {
-		return err
+		return nil, err
 	}
+	group, err := l.svcCtx.StudentRpc.QueryGroup(l.ctx, &student.QueryGroupRequest{
+		GroupId: req.GroupId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
 	group.DefenseId = defenseId
 	fmt.Println("insert defense id : ", defenseId)
 	_, err = l.svcCtx.StudentRpc.ModifyGroup(l.ctx, &student.ModifyGroupRequest{
 		Id:       req.GroupId,
 		NewGroup: group,
 	})
-	return err
+	return &types.AddDefenseReply{
+		Id: defenseId,
+	}, err
 }

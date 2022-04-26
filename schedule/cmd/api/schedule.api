@@ -12,6 +12,9 @@ type (
 		Committee         []Member `json:"committee,optional"`
 		GroupId           string   `json:"group_id,optional"`
 	}
+	addDefenseReply {
+		Id string `json:"id"`
+	}
 	QueryDefenseReq {
 		Id string `path:"id"`
 	}
@@ -24,6 +27,16 @@ type (
 	}
 	RemoveDefenseReq {
 		ID string `json:"id"`
+	}
+	QueryAvailableReq {
+		Students  []string `json:"students"`
+		Committee []string `json:"committee"`
+		Classroom string   `json:"classroom"`
+	}
+	QueryAvailableReply {
+		Students   []string      `json:"students"`
+		Committee  []TeacherInfo `json:"committee"`
+		Classrooms []string      `json:"classrooms"`
 	}
 )
 
@@ -64,7 +77,7 @@ service Schedule-api {
 	get /schedule/defense/query/all returns (QueryDefenseReply)
 	
 	@handler addDefense
-	post /schedule/defense/add (Defense)
+	post /schedule/defense/add (Defense) returns (addDefenseReply)
 	
 	@handler ModifyDefense
 	post /schedule/defense/modify (ModifyDefenseReq)
@@ -77,5 +90,8 @@ service Schedule-api {
 	
 	@handler QueryAvailableTeachers
 	get /schedule/defense/available/teacher/:id (QueryAvailableTeachersReq) returns (QueryAvailableTeachersResp)
+	
+	@handler QueryAvailable
+	get /schedule/defense/available/all (QueryAvailableReq) returns (QueryAvailableReply)
 	
 }

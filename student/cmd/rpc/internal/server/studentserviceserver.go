@@ -86,3 +86,8 @@ func (s *StudentServiceServer) QueryGroupContent(ctx context.Context, in *studen
 	l := logic.NewQueryGroupContentLogic(ctx, s.svcCtx)
 	return l.QueryGroupContent(in)
 }
+
+func (s *StudentServiceServer) QueryStudentsContent(ctx context.Context, in *student.QueryStudentsContentRequest) (*student.QueryGroupContentResponse, error) {
+	l := logic.NewQueryStudentsContentLogic(ctx, s.svcCtx)
+	return l.QueryStudentsContent(in)
+}
