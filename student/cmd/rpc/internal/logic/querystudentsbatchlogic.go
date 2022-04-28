@@ -3,8 +3,8 @@ package logic
 import (
 	"context"
 
+	"TDS-backend/common/typex"
 	"TDS-backend/student/cmd/rpc/internal/svc"
-	"TDS-backend/student/cmd/rpc/internal/utils"
 	"TDS-backend/student/cmd/rpc/types/student"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -31,7 +31,9 @@ func (l *QueryStudentsBatchLogic) QueryStudentsBatch(in *student.QueryStudentsBa
 	}
 	resp := &student.QueryStudentsResponse{}
 	for _, s := range students {
-		resp.List = append(resp.List, utils.StudentBtoJ(&s))
+		converted := &student.Student{}
+		typex.Convert(s, converted)
+		resp.List = append(resp.List, converted)
 	}
 	return resp, nil
 }

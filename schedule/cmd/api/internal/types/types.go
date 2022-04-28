@@ -6,14 +6,19 @@ type Member struct {
 	TeacherName string `json:"teacher_name,optional"`
 }
 
+type Student struct {
+	StudentID   string `json:"student_id"`
+	StudentName string `json:"student_name"`
+}
+
 type Defense struct {
-	Id                string   `json:"id,optional"`
-	Classroom         string   `json:"classroom,optional"`
-	ClassroomFullName string   `json:"classroom_full_name,optional"`
-	StartTime         string   `json:"start_time,optional"`
-	EndTime           string   `json:"end_time,optional"`
-	Committee         []Member `json:"committee,optional"`
-	GroupId           string   `json:"group_id,optional"`
+	Id                string    `json:"id,optional"`
+	Classroom         string    `json:"classroom,optional"`
+	ClassroomFullName string    `json:"classroom_full_name,optional"`
+	StartTime         string    `json:"start_time,optional"`
+	EndTime           string    `json:"end_time,optional"`
+	Committee         []Member  `json:"committee,optional"`
+	Students          []Student `json:"students, optional"`
 }
 
 type AddDefenseReply struct {

@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"TDS-backend/classroom/cmd/rpc/internal/svc"
-	"TDS-backend/classroom/cmd/rpc/internal/utils"
 	"TDS-backend/classroom/cmd/rpc/types/classroom"
+	"TDS-backend/common/typex"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -31,8 +31,9 @@ func (l *QueryAllClassroomsLogic) QueryAllClassrooms(in *classroom.EmptyRequest)
 	if err != nil {
 		return nil, err
 	}
-	for _, c := range classrooms {
-		out.Classrooms = append(out.Classrooms, utils.ClassroomBtoJ(&c))
+	err = typex.Convert(&classrooms, &out.Classrooms)
+	if err != nil {
+		return nil, err
 	}
 	return out, nil
 }

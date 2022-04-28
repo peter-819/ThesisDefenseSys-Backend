@@ -23,15 +23,8 @@ type StudentServiceClient interface {
 	ModifyStudent(ctx context.Context, in *ModifyStudentRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
 	QueryAllStudents(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*QueryStudentsResponse, error)
 	QueryStudent(ctx context.Context, in *QueryStudentRequest, opts ...grpc.CallOption) (*QueryStudentResponse, error)
-	QueryNongroupedStudents(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*QueryStudentsResponse, error)
+	QueryNondefensedStudents(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*QueryStudentsResponse, error)
 	QueryStudentsBatch(ctx context.Context, in *QueryStudentsBatchRequest, opts ...grpc.CallOption) (*QueryStudentsResponse, error)
-	NewGroup(ctx context.Context, in *NewGroupRequest, opts ...grpc.CallOption) (*NewGroupResponse, error)
-	QueryGroup(ctx context.Context, in *QueryGroupRequest, opts ...grpc.CallOption) (*Group, error)
-	QueryAllGroups(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*QueryGroupsResponse, error)
-	ModifyGroup(ctx context.Context, in *ModifyGroupRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
-	RemoveGroup(ctx context.Context, in *QueryGroupRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
-	QueryGroupContent(ctx context.Context, in *QueryGroupRequest, opts ...grpc.CallOption) (*QueryGroupContentResponse, error)
-	QueryStudentsContent(ctx context.Context, in *QueryStudentsContentRequest, opts ...grpc.CallOption) (*QueryGroupContentResponse, error)
 }
 
 type studentServiceClient struct {
@@ -87,9 +80,9 @@ func (c *studentServiceClient) QueryStudent(ctx context.Context, in *QueryStuden
 	return out, nil
 }
 
-func (c *studentServiceClient) QueryNongroupedStudents(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*QueryStudentsResponse, error) {
+func (c *studentServiceClient) QueryNondefensedStudents(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*QueryStudentsResponse, error) {
 	out := new(QueryStudentsResponse)
-	err := c.cc.Invoke(ctx, "/student.StudentService/QueryNongroupedStudents", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/student.StudentService/QueryNondefensedStudents", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -105,69 +98,6 @@ func (c *studentServiceClient) QueryStudentsBatch(ctx context.Context, in *Query
 	return out, nil
 }
 
-func (c *studentServiceClient) NewGroup(ctx context.Context, in *NewGroupRequest, opts ...grpc.CallOption) (*NewGroupResponse, error) {
-	out := new(NewGroupResponse)
-	err := c.cc.Invoke(ctx, "/student.StudentService/NewGroup", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *studentServiceClient) QueryGroup(ctx context.Context, in *QueryGroupRequest, opts ...grpc.CallOption) (*Group, error) {
-	out := new(Group)
-	err := c.cc.Invoke(ctx, "/student.StudentService/QueryGroup", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *studentServiceClient) QueryAllGroups(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*QueryGroupsResponse, error) {
-	out := new(QueryGroupsResponse)
-	err := c.cc.Invoke(ctx, "/student.StudentService/QueryAllGroups", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *studentServiceClient) ModifyGroup(ctx context.Context, in *ModifyGroupRequest, opts ...grpc.CallOption) (*EmptyResponse, error) {
-	out := new(EmptyResponse)
-	err := c.cc.Invoke(ctx, "/student.StudentService/ModifyGroup", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *studentServiceClient) RemoveGroup(ctx context.Context, in *QueryGroupRequest, opts ...grpc.CallOption) (*EmptyResponse, error) {
-	out := new(EmptyResponse)
-	err := c.cc.Invoke(ctx, "/student.StudentService/RemoveGroup", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *studentServiceClient) QueryGroupContent(ctx context.Context, in *QueryGroupRequest, opts ...grpc.CallOption) (*QueryGroupContentResponse, error) {
-	out := new(QueryGroupContentResponse)
-	err := c.cc.Invoke(ctx, "/student.StudentService/QueryGroupContent", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *studentServiceClient) QueryStudentsContent(ctx context.Context, in *QueryStudentsContentRequest, opts ...grpc.CallOption) (*QueryGroupContentResponse, error) {
-	out := new(QueryGroupContentResponse)
-	err := c.cc.Invoke(ctx, "/student.StudentService/QueryStudentsContent", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // StudentServiceServer is the server API for StudentService service.
 // All implementations must embed UnimplementedStudentServiceServer
 // for forward compatibility
@@ -177,15 +107,8 @@ type StudentServiceServer interface {
 	ModifyStudent(context.Context, *ModifyStudentRequest) (*EmptyResponse, error)
 	QueryAllStudents(context.Context, *EmptyRequest) (*QueryStudentsResponse, error)
 	QueryStudent(context.Context, *QueryStudentRequest) (*QueryStudentResponse, error)
-	QueryNongroupedStudents(context.Context, *EmptyRequest) (*QueryStudentsResponse, error)
+	QueryNondefensedStudents(context.Context, *EmptyRequest) (*QueryStudentsResponse, error)
 	QueryStudentsBatch(context.Context, *QueryStudentsBatchRequest) (*QueryStudentsResponse, error)
-	NewGroup(context.Context, *NewGroupRequest) (*NewGroupResponse, error)
-	QueryGroup(context.Context, *QueryGroupRequest) (*Group, error)
-	QueryAllGroups(context.Context, *EmptyRequest) (*QueryGroupsResponse, error)
-	ModifyGroup(context.Context, *ModifyGroupRequest) (*EmptyResponse, error)
-	RemoveGroup(context.Context, *QueryGroupRequest) (*EmptyResponse, error)
-	QueryGroupContent(context.Context, *QueryGroupRequest) (*QueryGroupContentResponse, error)
-	QueryStudentsContent(context.Context, *QueryStudentsContentRequest) (*QueryGroupContentResponse, error)
 	mustEmbedUnimplementedStudentServiceServer()
 }
 
@@ -208,32 +131,11 @@ func (UnimplementedStudentServiceServer) QueryAllStudents(context.Context, *Empt
 func (UnimplementedStudentServiceServer) QueryStudent(context.Context, *QueryStudentRequest) (*QueryStudentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryStudent not implemented")
 }
-func (UnimplementedStudentServiceServer) QueryNongroupedStudents(context.Context, *EmptyRequest) (*QueryStudentsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method QueryNongroupedStudents not implemented")
+func (UnimplementedStudentServiceServer) QueryNondefensedStudents(context.Context, *EmptyRequest) (*QueryStudentsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryNondefensedStudents not implemented")
 }
 func (UnimplementedStudentServiceServer) QueryStudentsBatch(context.Context, *QueryStudentsBatchRequest) (*QueryStudentsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method QueryStudentsBatch not implemented")
-}
-func (UnimplementedStudentServiceServer) NewGroup(context.Context, *NewGroupRequest) (*NewGroupResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method NewGroup not implemented")
-}
-func (UnimplementedStudentServiceServer) QueryGroup(context.Context, *QueryGroupRequest) (*Group, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method QueryGroup not implemented")
-}
-func (UnimplementedStudentServiceServer) QueryAllGroups(context.Context, *EmptyRequest) (*QueryGroupsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method QueryAllGroups not implemented")
-}
-func (UnimplementedStudentServiceServer) ModifyGroup(context.Context, *ModifyGroupRequest) (*EmptyResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ModifyGroup not implemented")
-}
-func (UnimplementedStudentServiceServer) RemoveGroup(context.Context, *QueryGroupRequest) (*EmptyResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RemoveGroup not implemented")
-}
-func (UnimplementedStudentServiceServer) QueryGroupContent(context.Context, *QueryGroupRequest) (*QueryGroupContentResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method QueryGroupContent not implemented")
-}
-func (UnimplementedStudentServiceServer) QueryStudentsContent(context.Context, *QueryStudentsContentRequest) (*QueryGroupContentResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method QueryStudentsContent not implemented")
 }
 func (UnimplementedStudentServiceServer) mustEmbedUnimplementedStudentServiceServer() {}
 
@@ -338,20 +240,20 @@ func _StudentService_QueryStudent_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _StudentService_QueryNongroupedStudents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _StudentService_QueryNondefensedStudents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(EmptyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StudentServiceServer).QueryNongroupedStudents(ctx, in)
+		return srv.(StudentServiceServer).QueryNondefensedStudents(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/student.StudentService/QueryNongroupedStudents",
+		FullMethod: "/student.StudentService/QueryNondefensedStudents",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StudentServiceServer).QueryNongroupedStudents(ctx, req.(*EmptyRequest))
+		return srv.(StudentServiceServer).QueryNondefensedStudents(ctx, req.(*EmptyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -370,132 +272,6 @@ func _StudentService_QueryStudentsBatch_Handler(srv interface{}, ctx context.Con
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(StudentServiceServer).QueryStudentsBatch(ctx, req.(*QueryStudentsBatchRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _StudentService_NewGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(NewGroupRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StudentServiceServer).NewGroup(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/student.StudentService/NewGroup",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StudentServiceServer).NewGroup(ctx, req.(*NewGroupRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _StudentService_QueryGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryGroupRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StudentServiceServer).QueryGroup(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/student.StudentService/QueryGroup",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StudentServiceServer).QueryGroup(ctx, req.(*QueryGroupRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _StudentService_QueryAllGroups_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EmptyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StudentServiceServer).QueryAllGroups(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/student.StudentService/QueryAllGroups",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StudentServiceServer).QueryAllGroups(ctx, req.(*EmptyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _StudentService_ModifyGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ModifyGroupRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StudentServiceServer).ModifyGroup(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/student.StudentService/ModifyGroup",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StudentServiceServer).ModifyGroup(ctx, req.(*ModifyGroupRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _StudentService_RemoveGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryGroupRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StudentServiceServer).RemoveGroup(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/student.StudentService/RemoveGroup",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StudentServiceServer).RemoveGroup(ctx, req.(*QueryGroupRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _StudentService_QueryGroupContent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryGroupRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StudentServiceServer).QueryGroupContent(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/student.StudentService/QueryGroupContent",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StudentServiceServer).QueryGroupContent(ctx, req.(*QueryGroupRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _StudentService_QueryStudentsContent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryStudentsContentRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(StudentServiceServer).QueryStudentsContent(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/student.StudentService/QueryStudentsContent",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StudentServiceServer).QueryStudentsContent(ctx, req.(*QueryStudentsContentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -528,40 +304,12 @@ var StudentService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _StudentService_QueryStudent_Handler,
 		},
 		{
-			MethodName: "QueryNongroupedStudents",
-			Handler:    _StudentService_QueryNongroupedStudents_Handler,
+			MethodName: "QueryNondefensedStudents",
+			Handler:    _StudentService_QueryNondefensedStudents_Handler,
 		},
 		{
 			MethodName: "QueryStudentsBatch",
 			Handler:    _StudentService_QueryStudentsBatch_Handler,
-		},
-		{
-			MethodName: "NewGroup",
-			Handler:    _StudentService_NewGroup_Handler,
-		},
-		{
-			MethodName: "QueryGroup",
-			Handler:    _StudentService_QueryGroup_Handler,
-		},
-		{
-			MethodName: "QueryAllGroups",
-			Handler:    _StudentService_QueryAllGroups_Handler,
-		},
-		{
-			MethodName: "ModifyGroup",
-			Handler:    _StudentService_ModifyGroup_Handler,
-		},
-		{
-			MethodName: "RemoveGroup",
-			Handler:    _StudentService_RemoveGroup_Handler,
-		},
-		{
-			MethodName: "QueryGroupContent",
-			Handler:    _StudentService_QueryGroupContent_Handler,
-		},
-		{
-			MethodName: "QueryStudentsContent",
-			Handler:    _StudentService_QueryStudentsContent_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

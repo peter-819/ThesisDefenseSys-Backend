@@ -11,19 +11,19 @@ import (
 )
 
 type Student struct {
-	Id            string   `bson:"id"`
-	Name          string   `bson:"name"`
-	PaperKeywords []string `bson:"paper_keywords"`
-	PaperTitle    string   `bson:"paper_title"`
-	GroupId       string   `bson:"group_id"`
-	Mentor        string   `bson:"mentor"`
+	Id            string   `bson:"id" json:"id"`
+	Name          string   `bson:"name" json:"name"`
+	PaperKeywords []string `bson:"paper_keywords" json:"paper_keywords"`
+	PaperTitle    string   `bson:"paper_title" json:"paper_title"`
+	Mentor        string   `bson:"mentor" json:"mentor"`
+	DefenseId     string   `bson:"defense_id" json:"defense_id"`
 }
 
 type IStudentModel interface {
 	QueryStudent(id string) (*Student, error)
 	RemoveStudent(id string) error
 	QueryAllStudents() ([]Student, error)
-	QueryNongroupedStudents() ([]Student, error)
+	QueryNondefensedStudents() ([]Student, error)
 	QueryStudentsBatch(ids []string) ([]Student, error)
 	ModifyStudent(id string, student *Student) error
 	AddStudent(student *Student) error
@@ -103,17 +103,17 @@ func (m *StudentModel) QueryAllStudents() ([]Student, error) {
 	return result, nil
 }
 
-func (m *StudentModel) QueryNongroupedStudents() ([]Student, error) {
+func (m *StudentModel) QueryNondefensedStudents() ([]Student, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	filter := bson.M{
 		"$or": []bson.M{
 			{
-				"group_id": "",
+				"defense_id": "",
 			},
 			{
-				"group_id": bson.M{
+				"defense_id": bson.M{
 					"$exists": false,
 				},
 			},

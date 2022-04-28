@@ -47,47 +47,12 @@ func (s *StudentServiceServer) QueryStudent(ctx context.Context, in *student.Que
 	return l.QueryStudent(in)
 }
 
-func (s *StudentServiceServer) QueryNongroupedStudents(ctx context.Context, in *student.EmptyRequest) (*student.QueryStudentsResponse, error) {
-	l := logic.NewQueryNongroupedStudentsLogic(ctx, s.svcCtx)
-	return l.QueryNongroupedStudents(in)
+func (s *StudentServiceServer) QueryNondefensedStudents(ctx context.Context, in *student.EmptyRequest) (*student.QueryStudentsResponse, error) {
+	l := logic.NewQueryNondefensedStudentsLogic(ctx, s.svcCtx)
+	return l.QueryNondefensedStudents(in)
 }
 
 func (s *StudentServiceServer) QueryStudentsBatch(ctx context.Context, in *student.QueryStudentsBatchRequest) (*student.QueryStudentsResponse, error) {
 	l := logic.NewQueryStudentsBatchLogic(ctx, s.svcCtx)
 	return l.QueryStudentsBatch(in)
-}
-
-func (s *StudentServiceServer) NewGroup(ctx context.Context, in *student.NewGroupRequest) (*student.NewGroupResponse, error) {
-	l := logic.NewNewGroupLogic(ctx, s.svcCtx)
-	return l.NewGroup(in)
-}
-
-func (s *StudentServiceServer) QueryGroup(ctx context.Context, in *student.QueryGroupRequest) (*student.Group, error) {
-	l := logic.NewQueryGroupLogic(ctx, s.svcCtx)
-	return l.QueryGroup(in)
-}
-
-func (s *StudentServiceServer) QueryAllGroups(ctx context.Context, in *student.EmptyRequest) (*student.QueryGroupsResponse, error) {
-	l := logic.NewQueryAllGroupsLogic(ctx, s.svcCtx)
-	return l.QueryAllGroups(in)
-}
-
-func (s *StudentServiceServer) ModifyGroup(ctx context.Context, in *student.ModifyGroupRequest) (*student.EmptyResponse, error) {
-	l := logic.NewModifyGroupLogic(ctx, s.svcCtx)
-	return l.ModifyGroup(in)
-}
-
-func (s *StudentServiceServer) RemoveGroup(ctx context.Context, in *student.QueryGroupRequest) (*student.EmptyResponse, error) {
-	l := logic.NewRemoveGroupLogic(ctx, s.svcCtx)
-	return l.RemoveGroup(in)
-}
-
-func (s *StudentServiceServer) QueryGroupContent(ctx context.Context, in *student.QueryGroupRequest) (*student.QueryGroupContentResponse, error) {
-	l := logic.NewQueryGroupContentLogic(ctx, s.svcCtx)
-	return l.QueryGroupContent(in)
-}
-
-func (s *StudentServiceServer) QueryStudentsContent(ctx context.Context, in *student.QueryStudentsContentRequest) (*student.QueryGroupContentResponse, error) {
-	l := logic.NewQueryStudentsContentLogic(ctx, s.svcCtx)
-	return l.QueryStudentsContent(in)
 }

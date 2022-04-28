@@ -4,10 +4,10 @@ import (
 	"context"
 
 	"TDS-backend/classroom/cmd/rpc/internal/svc"
-	"TDS-backend/classroom/cmd/rpc/internal/utils"
 	"TDS-backend/classroom/cmd/rpc/types/classroom"
 	"TDS-backend/common/errorx"
 	"TDS-backend/common/timex"
+	"TDS-backend/common/typex"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -34,14 +34,12 @@ func (l *QueryAvailableByTimeLogic) QueryAvailableByTime(in *classroom.QueryByTi
 	end_time, err := timex.GStringToTime(in.EndTime)
 	if err != nil {
 		return nil, errorx.NewDefaultError("教室结束时间格式错误: " + err.Error())
-	}	
+	}
 	out := &classroom.QueryClassroomsResponse{}
 	classrooms, err := l.svcCtx.ClassroomModel.QueryAvailableByTime(start_time, end_time)
 	if err != nil {
 		return nil, err
 	}
-	for _, c := range classrooms {
-		out.Classrooms = append(out.Classrooms, utils.ClassroomBtoJ(&c))
-	}
+	typex.Convert(&classrooms, &out.Classrooms)
 	return out, nil
 }

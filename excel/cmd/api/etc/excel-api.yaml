@@ -23,3 +23,9 @@ StudentRpc:
     Hosts:
     - etcd:2379
     Key: student.rpc
+
+UserRpc:
+  Etcd:
+    Hosts:
+    - etcd:2379
+    Key: user.rpc

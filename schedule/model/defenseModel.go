@@ -12,17 +12,21 @@ import (
 )
 
 type Member struct {
-	TeacherID   string `bson:"teacher_id"`
-	TeacherName string `bson:"teacher_name"`
+	TeacherID   string `bson:"teacher_id" json:"teacher_id"`
+	TeacherName string `bson:"teacher_name" json:"teacher_name"`
+}
+type Student struct {
+	StudentID   string `bson:"student_id" json:"student_id"`
+	StudentName string `bson:"student_name" json:"student_name"`
 }
 type Defense struct {
-	Id                primitive.ObjectID `bson:"_id"`
-	StartTime         time.Time          `bson:"start_time"`
-	EndTime           time.Time          `bson:"end_time"`
-	Classroom         string             `bson:"classroom"`
-	ClassroomFullName string             `bson:"classroom_full_name"`
-	Committee         []Member           `bson:"committee"`
-	GroupId           string             `bson:"group_id"`
+	Id                primitive.ObjectID `bson:"_id" json:"id"`
+	StartTime         time.Time          `bson:"start_time" json:"start_time"`
+	EndTime           time.Time          `bson:"end_time" json:"end_time"`
+	Classroom         string             `bson:"classroom" json:"classroom"`
+	ClassroomFullName string             `bson:"classroom_full_name" json:"classroom_full_name"`
+	Committee         []Member           `bson:"committee" json:"committee"`
+	Students          []Student          `bson:"students" json:"students"`
 }
 
 type IDefenseModel interface {

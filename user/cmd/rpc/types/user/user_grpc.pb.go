@@ -22,9 +22,6 @@ type UserClient interface {
 	GetToken(ctx context.Context, in *TokenRequest, opts ...grpc.CallOption) (*TokenResponse, error)
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
 	RegisterBatch(ctx context.Context, in *RegisterBatchRequest, opts ...grpc.CallOption) (*RegisterBatchResponse, error)
-	GetTeacherList(ctx context.Context, in *GetTeacherListRequest, opts ...grpc.CallOption) (*GetTeacherListResponse, error)
-	GetTeacher(ctx context.Context, in *GetTeacherByIdRequest, opts ...grpc.CallOption) (*TeacherInfo, error)
-	SetTeacherInfo(ctx context.Context, in *SetTeacherInfoRequest, opts ...grpc.CallOption) (*SetTeacherInfoResponse, error)
 }
 
 type userClient struct {
@@ -71,33 +68,6 @@ func (c *userClient) RegisterBatch(ctx context.Context, in *RegisterBatchRequest
 	return out, nil
 }
 
-func (c *userClient) GetTeacherList(ctx context.Context, in *GetTeacherListRequest, opts ...grpc.CallOption) (*GetTeacherListResponse, error) {
-	out := new(GetTeacherListResponse)
-	err := c.cc.Invoke(ctx, "/user.User/getTeacherList", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userClient) GetTeacher(ctx context.Context, in *GetTeacherByIdRequest, opts ...grpc.CallOption) (*TeacherInfo, error) {
-	out := new(TeacherInfo)
-	err := c.cc.Invoke(ctx, "/user.User/getTeacher", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userClient) SetTeacherInfo(ctx context.Context, in *SetTeacherInfoRequest, opts ...grpc.CallOption) (*SetTeacherInfoResponse, error) {
-	out := new(SetTeacherInfoResponse)
-	err := c.cc.Invoke(ctx, "/user.User/setTeacherInfo", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // UserServer is the server API for User service.
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility
@@ -106,9 +76,6 @@ type UserServer interface {
 	GetToken(context.Context, *TokenRequest) (*TokenResponse, error)
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
 	RegisterBatch(context.Context, *RegisterBatchRequest) (*RegisterBatchResponse, error)
-	GetTeacherList(context.Context, *GetTeacherListRequest) (*GetTeacherListResponse, error)
-	GetTeacher(context.Context, *GetTeacherByIdRequest) (*TeacherInfo, error)
-	SetTeacherInfo(context.Context, *SetTeacherInfoRequest) (*SetTeacherInfoResponse, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -127,15 +94,6 @@ func (UnimplementedUserServer) Register(context.Context, *RegisterRequest) (*Reg
 }
 func (UnimplementedUserServer) RegisterBatch(context.Context, *RegisterBatchRequest) (*RegisterBatchResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterBatch not implemented")
-}
-func (UnimplementedUserServer) GetTeacherList(context.Context, *GetTeacherListRequest) (*GetTeacherListResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTeacherList not implemented")
-}
-func (UnimplementedUserServer) GetTeacher(context.Context, *GetTeacherByIdRequest) (*TeacherInfo, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTeacher not implemented")
-}
-func (UnimplementedUserServer) SetTeacherInfo(context.Context, *SetTeacherInfoRequest) (*SetTeacherInfoResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetTeacherInfo not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 
@@ -222,60 +180,6 @@ func _User_RegisterBatch_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _User_GetTeacherList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTeacherListRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServer).GetTeacherList(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/user.User/getTeacherList",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).GetTeacherList(ctx, req.(*GetTeacherListRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _User_GetTeacher_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTeacherByIdRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServer).GetTeacher(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/user.User/getTeacher",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).GetTeacher(ctx, req.(*GetTeacherByIdRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _User_SetTeacherInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetTeacherInfoRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServer).SetTeacherInfo(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/user.User/setTeacherInfo",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).SetTeacherInfo(ctx, req.(*SetTeacherInfoRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // User_ServiceDesc is the grpc.ServiceDesc for User service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -298,18 +202,6 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RegisterBatch",
 			Handler:    _User_RegisterBatch_Handler,
-		},
-		{
-			MethodName: "getTeacherList",
-			Handler:    _User_GetTeacherList_Handler,
-		},
-		{
-			MethodName: "getTeacher",
-			Handler:    _User_GetTeacher_Handler,
-		},
-		{
-			MethodName: "setTeacherInfo",
-			Handler:    _User_SetTeacherInfo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

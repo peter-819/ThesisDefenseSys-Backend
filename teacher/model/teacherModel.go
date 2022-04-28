@@ -11,18 +11,24 @@ import (
 )
 
 type Schedule struct {
-	ScheduleId string    `bson:"schedule_id"`
-	Name       string    `bson:"name"`
-	StartTime  time.Time `bson:"start_time"`
-	EndTime    time.Time `bson:"end_time"`
+	ScheduleId string    `bson:"schedule_id" json:"schedule_id"`
+	Name       string    `bson:"name" json:"name"`
+	StartTime  time.Time `bson:"start_time" json:"start_time"`
+	EndTime    time.Time `bson:"end_time" json:"end_time"`
+}
+type Defense struct {
+	DefenseId string `bson:"defense_id" json:"defense_id"`
+	StartTime string `bson:"start_time" json:"start_time"`
+	EndTime   string `bson:"end_time" json:"end_time"`
 }
 type Teacher struct {
-	Id                string     `bson:"id,optional"`
-	Name              string     `bson:"name,optional"`
-	IsSecretary       string     `bson:"is_secretary"`
-	MaxDefensePerWeek int        `bson:"max_defense_per_week"`
-	PreferKeywords    []string   `bson:"prefer_keywords"`
-	Schedules         []Schedule `bson:"schedules"`
+	Id                string     `bson:"id,optional" json:"id"`
+	Name              string     `bson:"name,optional" json:"name"`
+	IsSecretary       string     `bson:"is_secretary" json:"is_secretary"`
+	MaxDefensePerWeek int        `bson:"max_defense_per_week" json:"max_defense_per_week"`
+	PreferKeywords    []string   `bson:"prefer_keywords" json:"prefer_keywords"`
+	Schedules         []Schedule `bson:"schedules" json:"schedules"`
+	Defenses          []Defense  `bson:"defenses" json:"defenses"`
 }
 
 type ITeacherModel interface {

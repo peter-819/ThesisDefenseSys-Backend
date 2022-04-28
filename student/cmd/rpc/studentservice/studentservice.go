@@ -13,24 +13,16 @@ import (
 )
 
 type (
-	AddStudentRequest           = student.AddStudentRequest
-	EmptyRequest                = student.EmptyRequest
-	EmptyResponse               = student.EmptyResponse
-	Group                       = student.Group
-	ModifyGroupRequest          = student.ModifyGroupRequest
-	ModifyStudentRequest        = student.ModifyStudentRequest
-	NewGroupRequest             = student.NewGroupRequest
-	NewGroupResponse            = student.NewGroupResponse
-	QueryGroupContentResponse   = student.QueryGroupContentResponse
-	QueryGroupRequest           = student.QueryGroupRequest
-	QueryGroupsResponse         = student.QueryGroupsResponse
-	QueryStudentRequest         = student.QueryStudentRequest
-	QueryStudentResponse        = student.QueryStudentResponse
-	QueryStudentsBatchRequest   = student.QueryStudentsBatchRequest
-	QueryStudentsContentRequest = student.QueryStudentsContentRequest
-	QueryStudentsResponse       = student.QueryStudentsResponse
-	RemoveStudentRequest        = student.RemoveStudentRequest
-	Student                     = student.Student
+	AddStudentRequest         = student.AddStudentRequest
+	EmptyRequest              = student.EmptyRequest
+	EmptyResponse             = student.EmptyResponse
+	ModifyStudentRequest      = student.ModifyStudentRequest
+	QueryStudentRequest       = student.QueryStudentRequest
+	QueryStudentResponse      = student.QueryStudentResponse
+	QueryStudentsBatchRequest = student.QueryStudentsBatchRequest
+	QueryStudentsResponse     = student.QueryStudentsResponse
+	RemoveStudentRequest      = student.RemoveStudentRequest
+	Student                   = student.Student
 
 	StudentService interface {
 		AddStudent(ctx context.Context, in *AddStudentRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
@@ -38,15 +30,8 @@ type (
 		ModifyStudent(ctx context.Context, in *ModifyStudentRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
 		QueryAllStudents(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*QueryStudentsResponse, error)
 		QueryStudent(ctx context.Context, in *QueryStudentRequest, opts ...grpc.CallOption) (*QueryStudentResponse, error)
-		QueryNongroupedStudents(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*QueryStudentsResponse, error)
+		QueryNondefensedStudents(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*QueryStudentsResponse, error)
 		QueryStudentsBatch(ctx context.Context, in *QueryStudentsBatchRequest, opts ...grpc.CallOption) (*QueryStudentsResponse, error)
-		NewGroup(ctx context.Context, in *NewGroupRequest, opts ...grpc.CallOption) (*NewGroupResponse, error)
-		QueryGroup(ctx context.Context, in *QueryGroupRequest, opts ...grpc.CallOption) (*Group, error)
-		QueryAllGroups(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*QueryGroupsResponse, error)
-		ModifyGroup(ctx context.Context, in *ModifyGroupRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
-		RemoveGroup(ctx context.Context, in *QueryGroupRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
-		QueryGroupContent(ctx context.Context, in *QueryGroupRequest, opts ...grpc.CallOption) (*QueryGroupContentResponse, error)
-		QueryStudentsContent(ctx context.Context, in *QueryStudentsContentRequest, opts ...grpc.CallOption) (*QueryGroupContentResponse, error)
 	}
 
 	defaultStudentService struct {
@@ -85,47 +70,12 @@ func (m *defaultStudentService) QueryStudent(ctx context.Context, in *QueryStude
 	return client.QueryStudent(ctx, in, opts...)
 }
 
-func (m *defaultStudentService) QueryNongroupedStudents(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*QueryStudentsResponse, error) {
+func (m *defaultStudentService) QueryNondefensedStudents(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*QueryStudentsResponse, error) {
 	client := student.NewStudentServiceClient(m.cli.Conn())
-	return client.QueryNongroupedStudents(ctx, in, opts...)
+	return client.QueryNondefensedStudents(ctx, in, opts...)
 }
 
 func (m *defaultStudentService) QueryStudentsBatch(ctx context.Context, in *QueryStudentsBatchRequest, opts ...grpc.CallOption) (*QueryStudentsResponse, error) {
 	client := student.NewStudentServiceClient(m.cli.Conn())
 	return client.QueryStudentsBatch(ctx, in, opts...)
-}
-
-func (m *defaultStudentService) NewGroup(ctx context.Context, in *NewGroupRequest, opts ...grpc.CallOption) (*NewGroupResponse, error) {
-	client := student.NewStudentServiceClient(m.cli.Conn())
-	return client.NewGroup(ctx, in, opts...)
-}
-
-func (m *defaultStudentService) QueryGroup(ctx context.Context, in *QueryGroupRequest, opts ...grpc.CallOption) (*Group, error) {
-	client := student.NewStudentServiceClient(m.cli.Conn())
-	return client.QueryGroup(ctx, in, opts...)
-}
-
-func (m *defaultStudentService) QueryAllGroups(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*QueryGroupsResponse, error) {
-	client := student.NewStudentServiceClient(m.cli.Conn())
-	return client.QueryAllGroups(ctx, in, opts...)
-}
-
-func (m *defaultStudentService) ModifyGroup(ctx context.Context, in *ModifyGroupRequest, opts ...grpc.CallOption) (*EmptyResponse, error) {
-	client := student.NewStudentServiceClient(m.cli.Conn())
-	return client.ModifyGroup(ctx, in, opts...)
-}
-
-func (m *defaultStudentService) RemoveGroup(ctx context.Context, in *QueryGroupRequest, opts ...grpc.CallOption) (*EmptyResponse, error) {
-	client := student.NewStudentServiceClient(m.cli.Conn())
-	return client.RemoveGroup(ctx, in, opts...)
-}
-
-func (m *defaultStudentService) QueryGroupContent(ctx context.Context, in *QueryGroupRequest, opts ...grpc.CallOption) (*QueryGroupContentResponse, error) {
-	client := student.NewStudentServiceClient(m.cli.Conn())
-	return client.QueryGroupContent(ctx, in, opts...)
-}
-
-func (m *defaultStudentService) QueryStudentsContent(ctx context.Context, in *QueryStudentsContentRequest, opts ...grpc.CallOption) (*QueryGroupContentResponse, error) {
-	client := student.NewStudentServiceClient(m.cli.Conn())
-	return client.QueryStudentsContent(ctx, in, opts...)
 }

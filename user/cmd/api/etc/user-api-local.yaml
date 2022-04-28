@@ -11,6 +11,12 @@ UserRpc:
     - 127.0.0.1:2379
     Key: user.rpc
 
+TeacherRpc:
+  Etcd:
+    Hosts:
+    - 127.0.0.1:2379
+    Key: teacher.rpc
+
 Auth:
   AccessSecret: TDS-secret-key
   AccessExpire: 86400

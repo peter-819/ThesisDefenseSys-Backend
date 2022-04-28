@@ -3,8 +3,8 @@ package logic
 import (
 	"context"
 
+	"TDS-backend/common/typex"
 	"TDS-backend/teacher/cmd/rpc/internal/svc"
-	"TDS-backend/teacher/cmd/rpc/internal/utils"
 	"TDS-backend/teacher/cmd/rpc/types/teacher"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -30,7 +30,12 @@ func (l *QueryTeacherLogic) QueryTeacher(in *teacher.QueryTeacherRequest) (*teac
 	if err != nil {
 		return nil, err
 	}
+	outTeacher := &teacher.Teacher{}
+	err = typex.Convert(t, outTeacher)
+	if err != nil {
+		return nil, err
+	}
 	out := &teacher.QueryTeacherResponse{}
-	out.Teacher = utils.TeacherBtoJ(t)
+	out.Teacher = outTeacher
 	return out, nil
 }

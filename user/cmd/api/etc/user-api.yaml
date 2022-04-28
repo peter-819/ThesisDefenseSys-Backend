@@ -11,6 +11,13 @@ UserRpc:
     - etcd:2379
     Key: user.rpc
 
+TeacherRpc:
+  Etcd:
+    Hosts:
+    - etcd:2379
+    Key: teacher.rpc
+
+
 Auth:
   AccessSecret: TDS-secret-key
   AccessExpire: 86400

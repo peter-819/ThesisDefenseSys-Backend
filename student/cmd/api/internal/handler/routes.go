@@ -19,58 +19,13 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/student/query/nongrouped",
-				Handler: QueryNongroupedStudentsHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPost,
-				Path:    "/student/import/excel",
-				Handler: ImportExcelHandler(serverCtx),
+				Path:    "/student/query/nondefensed",
+				Handler: QueryNondefensedStudentsHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
 				Path:    "/student/remove/:id",
 				Handler: RemoveStudentHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/student/group/new/:name",
-				Handler: NewGroupHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/student/group/add/member/:group_id/:student_id",
-				Handler: AddMemberHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/student/group/remove/member/:group_id/:student_id",
-				Handler: RemoveMemberHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/student/group/query/:id",
-				Handler: QueryGroupHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/student/group/remove/:id",
-				Handler: RemoveGroupHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/student/group/query/content/:id",
-				Handler: QueryGroupContentHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/student/group/query/students/:id",
-				Handler: QueryGroupStudentsHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPost,
-				Path:    "/student/query/content",
-				Handler: QueryStudentsContentHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),

@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 
+	"TDS-backend/common/typex"
 	"TDS-backend/teacher/cmd/rpc/internal/svc"
 	"TDS-backend/teacher/cmd/rpc/types/teacher"
 
@@ -24,7 +25,11 @@ func NewQueryAllTeacherLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Q
 }
 
 func (l *QueryAllTeacherLogic) QueryAllTeacher(in *teacher.QueryAllTeacherRequest) (*teacher.QueryTeachersResponse, error) {
-	// todo: add your logic here and delete this line
-	// l.svcCtx.TeacherModel.
-	return &teacher.QueryTeachersResponse{}, nil
+	resp := &teacher.QueryTeachersResponse{}
+	teachers, err := l.svcCtx.TeacherModel.QueryAllTeachers()
+	if err != nil {
+		return nil, err
+	}
+	err = typex.Convert(&teachers, &resp.List)
+	return resp, err
 }

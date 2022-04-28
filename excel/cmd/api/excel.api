@@ -1,16 +1,21 @@
 type (
+	ImportExcelReq {
+		Usage string `path:"usage"`
+	}
 	ImportExcelReply {
 		Count int `json:"count"`
+	}
+	PreviewExcelReply {
+		Data [][]string `json:"data"`
 	}
 )
 @server(
 	jwt: Auth
 )
 service Excel-api {
-	@handler ImportStudent
-	post /excel/import/student returns (ImportExcelReply)
-	
-	@handler ImportClassrooms
-	post /excel/import/classroom returns (ImportExcelReply)
+	@handler Import
+	post /excel/import/:usage (ImportExcelReq) returns (ImportExcelReply)
+	@handler Preview
+	post /excel/preview returns (PreviewExcelReply)
 	
 }

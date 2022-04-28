@@ -13,29 +13,20 @@ import (
 )
 
 type (
-	GetTeacherByIdRequest  = user.GetTeacherByIdRequest
-	GetTeacherListRequest  = user.GetTeacherListRequest
-	GetTeacherListResponse = user.GetTeacherListResponse
-	IdRequest              = user.IdRequest
-	RegisterBatchRequest   = user.RegisterBatchRequest
-	RegisterBatchResponse  = user.RegisterBatchResponse
-	RegisterRequest        = user.RegisterRequest
-	RegisterResponse       = user.RegisterResponse
-	SetTeacherInfoRequest  = user.SetTeacherInfoRequest
-	SetTeacherInfoResponse = user.SetTeacherInfoResponse
-	TeacherInfo            = user.TeacherInfo
-	TokenRequest           = user.TokenRequest
-	TokenResponse          = user.TokenResponse
-	UserResponse           = user.UserResponse
+	IdRequest             = user.IdRequest
+	RegisterBatchRequest  = user.RegisterBatchRequest
+	RegisterBatchResponse = user.RegisterBatchResponse
+	RegisterRequest       = user.RegisterRequest
+	RegisterResponse      = user.RegisterResponse
+	TokenRequest          = user.TokenRequest
+	TokenResponse         = user.TokenResponse
+	UserResponse          = user.UserResponse
 
 	User interface {
 		GetUser(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*UserResponse, error)
 		GetToken(ctx context.Context, in *TokenRequest, opts ...grpc.CallOption) (*TokenResponse, error)
 		Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
 		RegisterBatch(ctx context.Context, in *RegisterBatchRequest, opts ...grpc.CallOption) (*RegisterBatchResponse, error)
-		GetTeacherList(ctx context.Context, in *GetTeacherListRequest, opts ...grpc.CallOption) (*GetTeacherListResponse, error)
-		GetTeacher(ctx context.Context, in *GetTeacherByIdRequest, opts ...grpc.CallOption) (*TeacherInfo, error)
-		SetTeacherInfo(ctx context.Context, in *SetTeacherInfoRequest, opts ...grpc.CallOption) (*SetTeacherInfoResponse, error)
 	}
 
 	defaultUser struct {
@@ -67,19 +58,4 @@ func (m *defaultUser) Register(ctx context.Context, in *RegisterRequest, opts ..
 func (m *defaultUser) RegisterBatch(ctx context.Context, in *RegisterBatchRequest, opts ...grpc.CallOption) (*RegisterBatchResponse, error) {
 	client := user.NewUserClient(m.cli.Conn())
 	return client.RegisterBatch(ctx, in, opts...)
-}
-
-func (m *defaultUser) GetTeacherList(ctx context.Context, in *GetTeacherListRequest, opts ...grpc.CallOption) (*GetTeacherListResponse, error) {
-	client := user.NewUserClient(m.cli.Conn())
-	return client.GetTeacherList(ctx, in, opts...)
-}
-
-func (m *defaultUser) GetTeacher(ctx context.Context, in *GetTeacherByIdRequest, opts ...grpc.CallOption) (*TeacherInfo, error) {
-	client := user.NewUserClient(m.cli.Conn())
-	return client.GetTeacher(ctx, in, opts...)
-}
-
-func (m *defaultUser) SetTeacherInfo(ctx context.Context, in *SetTeacherInfoRequest, opts ...grpc.CallOption) (*SetTeacherInfoResponse, error) {
-	client := user.NewUserClient(m.cli.Conn())
-	return client.SetTeacherInfo(ctx, in, opts...)
 }

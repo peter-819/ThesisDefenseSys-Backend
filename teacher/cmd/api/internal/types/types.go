@@ -8,6 +8,12 @@ type Schedule struct {
 	EndTime    string `json:"end_time"`
 }
 
+type Defense struct {
+	DefenseId string `json:"defense_id"`
+	StartTime string `json:"start_time"`
+	EndTime   string `json:"end_time"`
+}
+
 type Teacher struct {
 	Id                string     `json:"id"`
 	Name              string     `json:"name"`
@@ -15,6 +21,7 @@ type Teacher struct {
 	MaxDefensePerWeek int        `json:"max_defense_per_week"`
 	PreferKeywords    []string   `json:"prefer_keywords"`
 	Schedules         []Schedule `json:"schedules"`
+	Defenses          []Defense  `json:"defenses"`
 }
 
 type QueryTeacherReq struct {

@@ -7,14 +7,9 @@ import (
 
 type Config struct {
 	rest.RestConf
-    ClassroomRpc zrpc.RpcClientConf
-    ExcelRpc zrpc.RpcClientConf
-	Auth struct {
+	ClassroomRpc zrpc.RpcClientConf
+	Auth         struct {
 		AccessSecret string
 		AccessExpire int64
-	}
-	Mongodb struct {
-		DataSource string
-		DatabaseName string
 	}
 }

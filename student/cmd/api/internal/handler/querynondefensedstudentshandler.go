@@ -5,21 +5,13 @@ import (
 
 	"TDS-backend/student/cmd/api/internal/logic"
 	"TDS-backend/student/cmd/api/internal/svc"
-	"TDS-backend/student/cmd/api/internal/types"
-
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func NewGroupHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func QueryNondefensedStudentsHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.NewGroupReq
-		if err := httpx.Parse(r, &req); err != nil {
-			httpx.Error(w, err)
-			return
-		}
-
-		l := logic.NewNewGroupLogic(r.Context(), svcCtx)
-		resp, err := l.NewGroup(req)
+		l := logic.NewQueryNondefensedStudentsLogic(r.Context(), svcCtx)
+		resp, err := l.QueryNondefensedStudents()
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

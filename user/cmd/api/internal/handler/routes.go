@@ -22,16 +22,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/user/register",
 				Handler: registerHandler(serverCtx),
 			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/user/teacher/getlist",
-				Handler: getteacherlistHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPost,
-				Path:    "/user/teacher/set/info",
-				Handler: setteacherinfoHandler(serverCtx),
-			},
 		},
 	)
 }

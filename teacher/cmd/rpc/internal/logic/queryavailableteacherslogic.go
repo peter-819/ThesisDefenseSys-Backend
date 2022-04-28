@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"TDS-backend/common/timex"
+	"TDS-backend/common/typex"
 	"TDS-backend/teacher/cmd/rpc/internal/svc"
-	"TDS-backend/teacher/cmd/rpc/internal/utils"
 	"TDS-backend/teacher/cmd/rpc/types/teacher"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -42,7 +42,9 @@ func (l *QueryAvailableTeachersLogic) QueryAvailableTeachers(in *teacher.QueryAv
 		return nil, err
 	}
 	for _, t := range teachers {
-		resp.List = append(resp.List, utils.TeacherBtoJ(&t))
+		teacher := &teacher.Teacher{}
+		typex.Convert(&t, teacher)
+		resp.List = append(resp.List, teacher)
 	}
 	return resp, nil
 }

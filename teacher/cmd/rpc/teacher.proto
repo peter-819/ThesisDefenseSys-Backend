@@ -10,6 +10,11 @@ message Schedule {
     string start_time = 3;
     string end_time = 4;
 }
+message Defense {
+    string defense_id = 1;
+    string start_time = 2;
+    string end_time = 3;
+}
 message Teacher {
     string id = 1;
     string name = 2;
@@ -17,6 +22,7 @@ message Teacher {
     int32 max_defense_per_week = 4;
     repeated string prefer_keywords = 5;
     repeated Schedule schedules = 6;
+    repeated Defense defenses = 7;
 }
 
 message QueryTeacherRequest {

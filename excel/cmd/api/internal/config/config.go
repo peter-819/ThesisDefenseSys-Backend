@@ -10,6 +10,7 @@ type Config struct {
 	ClassroomRpc zrpc.RpcClientConf
 	TeacherRpc   zrpc.RpcClientConf
 	StudentRpc   zrpc.RpcClientConf
+	UserRpc      zrpc.RpcClientConf
 
 	Auth struct {
 		AccessSecret string

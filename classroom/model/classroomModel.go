@@ -1,28 +1,30 @@
 package model
 
 import (
+	"TDS-backend/common/errorx"
+	"TDS-backend/common/mongox"
 	"context"
 	"time"
-    "go.mongodb.org/mongo-driver/mongo"
+
 	"go.mongodb.org/mongo-driver/bson"
-    "go.mongodb.org/mongo-driver/bson/primitive"
-	"TDS-backend/common/mongox"
-	"TDS-backend/common/errorx"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
-type Classroom struct{
-	ID primitive.ObjectID `bson:"_id"`
-	Name string `bson:"name"`
-	Location string `bson:"location"`
-	StartTime time.Time `bson:"start_time"`
-	EndTime time.Time `bson:"end_time"`
+
+type Classroom struct {
+	ID        primitive.ObjectID `bson:"_id" json:"id"`
+	Name      string             `bson:"name" json:"name"`
+	Location  string             `bson:"location" json:"location"`
+	StartTime time.Time          `bson:"start_time" json:"start_time"`
+	EndTime   time.Time          `bson:"end_time" json:"end_time"`
 }
 
 type IClassroomModel interface {
 	RemoveClassroom(id string) error
-	InsertClassroom(classroom *Classroom)(error)
-	FindClassroomByIdHex(id primitive.ObjectID)(*Classroom, error)
-	FindClassroomByIdString(id string)(*Classroom, error)
-	QueryAllClassrooms()([]Classroom, error)
+	InsertClassroom(classroom *Classroom) error
+	FindClassroomByIdHex(id primitive.ObjectID) (*Classroom, error)
+	FindClassroomByIdString(id string) (*Classroom, error)
+	QueryAllClassrooms() ([]Classroom, error)
 	QueryAvailableByTime(start time.Time, end time.Time) ([]Classroom, error)
 }
 
@@ -36,8 +38,8 @@ func NewClassroomModel(d *mongox.Database) IClassroomModel {
 	}
 }
 
-func (m *ClassroomModel) RemoveClassroom(id string) error{
-	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)
+func (m *ClassroomModel) RemoveClassroom(id string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	hexId, err := primitive.ObjectIDFromHex(id)
@@ -45,7 +47,7 @@ func (m *ClassroomModel) RemoveClassroom(id string) error{
 		return errorx.NewDefaultError("非法教室ID")
 	}
 
-	filter := bson.M{ "_id": hexId }
+	filter := bson.M{"_id": hexId}
 	_, err = m.collection.DeleteOne(ctx, filter)
 	if err != nil {
 		return errorx.NewDefaultError("删除教室失败: " + err.Error())
@@ -53,8 +55,8 @@ func (m *ClassroomModel) RemoveClassroom(id string) error{
 	return nil
 }
 
-func (m *ClassroomModel) InsertClassroom(classroom *Classroom) (error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)
+func (m *ClassroomModel) InsertClassroom(classroom *Classroom) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	classroom.ID = primitive.NewObjectID()
 	_, err := m.collection.InsertOne(ctx, classroom)
@@ -64,19 +66,19 @@ func (m *ClassroomModel) InsertClassroom(classroom *Classroom) (error) {
 	return nil
 }
 
-func (m *ClassroomModel) FindClassroomByIdHex(id primitive.ObjectID)(*Classroom, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)
+func (m *ClassroomModel) FindClassroomByIdHex(id primitive.ObjectID) (*Classroom, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
-    filter := bson.M{"_id": id}
+	filter := bson.M{"_id": id}
 	res := &Classroom{}
-    if err := m.collection.FindOne(ctx, filter).Decode(res); err != nil {
-        return res, errorx.NewDefaultError("查询教室失败: " + err.Error())
-    }
+	if err := m.collection.FindOne(ctx, filter).Decode(res); err != nil {
+		return res, errorx.NewDefaultError("查询教室失败: " + err.Error())
+	}
 	return res, nil
 }
 
-func (m *ClassroomModel) FindClassroomByIdString(id string)(*Classroom, error) {
+func (m *ClassroomModel) FindClassroomByIdString(id string) (*Classroom, error) {
 	hexId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, errorx.NewDefaultError("非法教室ID")
@@ -84,10 +86,10 @@ func (m *ClassroomModel) FindClassroomByIdString(id string)(*Classroom, error) {
 	return m.FindClassroomByIdHex(hexId)
 }
 
-func (m *ClassroomModel) QueryAllClassrooms()([]Classroom, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)
+func (m *ClassroomModel) QueryAllClassrooms() ([]Classroom, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
-	
+
 	filter := bson.M{}
 	cur, err := m.collection.Find(ctx, filter)
 	if err != nil {
@@ -98,16 +100,16 @@ func (m *ClassroomModel) QueryAllClassrooms()([]Classroom, error) {
 	return result, nil
 }
 
-func (m *ClassroomModel) QueryAvailableByTime(start time.Time, end time.Time) ([]Classroom, error){
-	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)
+func (m *ClassroomModel) QueryAvailableByTime(start time.Time, end time.Time) ([]Classroom, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
-	
+
 	filter := bson.M{
-		"start_time" : bson.M{
-			"$lte":start,
+		"start_time": bson.M{
+			"$lte": start,
 		},
 		"end_time": bson.M{
-			"$gte":end,
+			"$gte": end,
 		},
 	}
 	cur, err := m.collection.Find(ctx, filter)

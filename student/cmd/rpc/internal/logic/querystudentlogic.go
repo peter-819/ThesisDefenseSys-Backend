@@ -3,8 +3,8 @@ package logic
 import (
 	"context"
 
+	"TDS-backend/common/typex"
 	"TDS-backend/student/cmd/rpc/internal/svc"
-	"TDS-backend/student/cmd/rpc/internal/utils"
 	"TDS-backend/student/cmd/rpc/types/student"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -31,6 +31,6 @@ func (l *QueryStudentLogic) QueryStudent(in *student.QueryStudentRequest) (*stud
 		return nil, err
 	}
 	out := &student.QueryStudentResponse{}
-	out.Student = utils.StudentBtoJ(s)
+	typex.Convert(s, out.Student)
 	return out, nil
 }

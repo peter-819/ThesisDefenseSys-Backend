@@ -3,9 +3,10 @@ package logic
 import (
 	"context"
 
+	"TDS-backend/common/typex"
 	"TDS-backend/teacher/cmd/api/internal/svc"
 	"TDS-backend/teacher/cmd/api/internal/types"
-	"TDS-backend/teacher/cmd/api/internal/utils"
+	"TDS-backend/teacher/cmd/rpc/teacherservice"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -26,10 +27,13 @@ func NewQueryTeacherLogic(ctx context.Context, svcCtx *svc.ServiceContext) Query
 
 func (l *QueryTeacherLogic) QueryTeacher(req types.QueryTeacherReq) (resp *types.Teacher, err error) {
 	// todo: add your logic here and delete this line
-	teacher, err := l.svcCtx.TeacherModel.QueryTeacher(req.Id)
+	teacher, err := l.svcCtx.TeacherRpc.QueryTeacher(l.ctx, &teacherservice.QueryTeacherRequest{
+		Id: req.Id,
+	})
 	if err != nil {
 		return nil, err
 	}
-	resp = utils.TeacherBtoJ(teacher)
-	return resp, nil
+	resp = &types.Teacher{}
+	err = typex.Convert(teacher.Teacher, resp)
+	return resp, err
 }

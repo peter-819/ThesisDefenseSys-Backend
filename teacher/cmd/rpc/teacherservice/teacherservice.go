@@ -14,6 +14,7 @@ import (
 
 type (
 	AddTeacherRequest             = teacher.AddTeacherRequest
+	Defense                       = teacher.Defense
 	EmptyResponse                 = teacher.EmptyResponse
 	ModifyTeacherRequest          = teacher.ModifyTeacherRequest
 	QueryAllTeacherRequest        = teacher.QueryAllTeacherRequest

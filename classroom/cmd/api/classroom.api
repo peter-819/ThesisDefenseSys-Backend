@@ -21,9 +21,6 @@ type (
 	jwt: Auth
 )
 service Classroom-api {
-	@handler ImportClassrooms
-	post /classroom/import/excel
-	
 	@handler QueryAllClassrooms
 	get /classroom/query/all returns (QueryClassroomsReply)
 	

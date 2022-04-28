@@ -3,9 +3,10 @@ package logic
 import (
 	"context"
 
+	"TDS-backend/common/typex"
 	"TDS-backend/teacher/cmd/api/internal/svc"
 	"TDS-backend/teacher/cmd/api/internal/types"
-	"TDS-backend/teacher/cmd/api/internal/utils"
+	"TDS-backend/teacher/cmd/rpc/teacherservice"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -25,11 +26,11 @@ func NewModifyTeacherLogic(ctx context.Context, svcCtx *svc.ServiceContext) Modi
 }
 
 func (l *ModifyTeacherLogic) ModifyTeacher(req types.ModifyTeacherReq) error {
-	// todo: add your logic here and delete this line
-	newTeacher, err := utils.TeacherJtoB(&req.NewTeacher)
-	if err != nil {
-		return err
-	}
-	err = l.svcCtx.TeacherModel.ModifyTeacher(req.Id, newTeacher)
+	newTeacher := &teacherservice.Teacher{}
+	typex.Convert(req.NewTeacher, newTeacher)
+	_, err := l.svcCtx.TeacherRpc.ModifyTeacher(l.ctx, &teacherservice.ModifyTeacherRequest{
+		Id:         req.Id,
+		NewTeacher: newTeacher,
+	})
 	return err
 }

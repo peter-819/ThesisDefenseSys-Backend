@@ -9,5 +9,5 @@ Auth:
 TeacherRpc:
   Etcd:
     Hosts:
-    - etcd:2379
+    - 127.0.0.1:2379
     Key: teacher.rpc
