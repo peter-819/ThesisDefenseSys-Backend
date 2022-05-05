@@ -30,3 +30,9 @@ UserRpc:
     - 127.0.0.1:2379
     Key: user.rpc
 
+DefenseRpc:
+  Etcd:
+    Hosts:
+    - 127.0.0.1:2379
+    Key: defense.rpc
+

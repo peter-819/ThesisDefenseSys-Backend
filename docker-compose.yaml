@@ -90,6 +90,21 @@ services:
       - etcd
       - mongo
 
+  defense_rpc:
+    build: 
+      context: .
+      dockerfile: ./schedule/cmd/rpc/Dockerfile
+    container_name: defense_rpc_container
+    networks:
+      - app-tier
+    image: defense_rpc:v1
+    restart: always
+    expose:
+      - "9006"
+    depends_on:
+      - etcd
+      - mongo
+
   route_api:
     build: 
       context: .
@@ -134,6 +149,8 @@ services:
       - student_rpc
       - teacher_rpc
       - classroom_rpc
+      - user_rpc
+      - defense_rpc
 
   schedule_api:
     build: 

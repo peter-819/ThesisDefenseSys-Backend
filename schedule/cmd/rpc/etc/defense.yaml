@@ -1,0 +1,10 @@
+Name: defense.rpc
+ListenOn: 0.0.0.0:9006
+Etcd:
+  Hosts:
+  - etcd:2379
+  Key: defense.rpc
+
+Mongodb:
+  DataSource: mongodb://jeromeguan:guanhaobo123@mongo:27017/TDS?&connect=direct&authSource=admin&authMechanism=SCRAM-SHA-256
+  DatabaseName: TDS

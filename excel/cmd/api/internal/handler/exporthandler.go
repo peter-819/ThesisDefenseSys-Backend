@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	"TDS-backend/excel/cmd/api/internal/logic"
@@ -21,6 +22,7 @@ func ExportHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		w.Header().Set("Content-Type", "application/octet-stream")
 		l := logic.NewExportLogic(r.Context(), svcCtx)
 		_, err := l.Export(&req, w)
+		fmt.Println("export error: ", err)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		} else {

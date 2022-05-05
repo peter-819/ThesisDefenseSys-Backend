@@ -4,6 +4,7 @@ import (
 	"TDS-backend/classroom/cmd/rpc/classroomservice"
 	"TDS-backend/common/interceptor"
 	"TDS-backend/excel/cmd/api/internal/config"
+	"TDS-backend/schedule/cmd/rpc/defenseservice"
 	"TDS-backend/student/cmd/rpc/studentservice"
 	"TDS-backend/teacher/cmd/rpc/teacherservice"
 	"TDS-backend/user/cmd/rpc/user"
@@ -17,6 +18,7 @@ type ServiceContext struct {
 	ClassroomRpc classroomservice.ClassroomService
 	StudentRpc   studentservice.StudentService
 	UserRpc      user.User
+	DefenseRpc   defenseservice.DefenseService
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -26,5 +28,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		ClassroomRpc: classroomservice.NewClassroomService(zrpc.MustNewClient(c.ClassroomRpc, zrpc.WithUnaryClientInterceptor(interceptor.ClientErrorinterceptor))),
 		StudentRpc:   studentservice.NewStudentService(zrpc.MustNewClient(c.StudentRpc, zrpc.WithUnaryClientInterceptor(interceptor.ClientErrorinterceptor))),
 		UserRpc:      user.NewUser(zrpc.MustNewClient(c.UserRpc, zrpc.WithUnaryClientInterceptor(interceptor.ClientErrorinterceptor))),
+		DefenseRpc:   defenseservice.NewDefenseService(zrpc.MustNewClient(c.DefenseRpc, zrpc.WithUnaryClientInterceptor(interceptor.ClientErrorinterceptor))),
 	}
 }

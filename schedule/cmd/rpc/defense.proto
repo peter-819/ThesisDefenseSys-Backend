@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package defense;
+option go_package = "./defense";
+
+message EmptyRequest {}
+message Member {
+    string teacher_id = 1;
+    string teacher_name = 2;
+}
+message Student {
+    string student_id = 1;
+    string student_name = 2;
+}
+message Defense {
+    string id = 1;
+    string classroom = 2;
+    string classroom_full_name = 3;
+    string start_time = 4;
+    string end_time = 5;
+    repeated Member committee = 6;
+    repeated Student students = 7; 
+}
+message QueryAllDefensesReply {
+    repeated Defense defenses = 1;
+}
+service DefenseService {
+    rpc QueryAllDefenses(EmptyRequest) returns(QueryAllDefensesReply);
+}
