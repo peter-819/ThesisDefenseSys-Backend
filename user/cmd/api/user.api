@@ -23,10 +23,53 @@ type (
 	}
 )
 
+type (
+	UserInfo {
+		Id   string `json:"id"`
+		Role string `json:"role"`
+		Name string `json:"name"`
+	}
+	QueryUserReq {
+		Id string `path:"id"`
+	}
+	QueryUsersResp {
+		Users []UserInfo `json:"users"`
+	}
+	SetSecretaryReq {
+		Id          string `json:"id"`
+		IsSecretary bool   `json:"is_secretary"`
+	}
+)
+
+type (
+	VerifyTokenReq  struct{}
+	VerifyTokenResp {
+		UserId string `json:"userId"`
+		Ok     bool   `json:"ok"`
+	}
+)
+
 service user-api {
 	@handler login
 	post /user/login (LoginReq) returns (LoginReply)
 	
 	@handler register
 	post /user/register (RegisterReq) returns (RegisterReply)
+}
+
+@server(
+	jwt:Auth
+)
+service user-api {
+	@handler VerifyToken
+	get /user/verify/token (VerifyTokenReq) returns (VerifyTokenResp)
+	
+	@handler SetSecretary
+	post /user/set/secretary (SetSecretaryReq)
+	
+	@handler GetUserInfo
+	get /user/query/id/:id (QueryUserReq) returns (UserInfo)
+	
+	@handler GetTeachers
+	get /user/query/teachers returns (QueryUsersResp)
 }

@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 
 	"TDS-backend/common/typex"
 	"TDS-backend/teacher/cmd/api/internal/svc"
@@ -33,7 +35,11 @@ func (l *QueryTeacherLogic) QueryTeacher(req types.QueryTeacherReq) (resp *types
 	if err != nil {
 		return nil, err
 	}
-	resp = &types.Teacher{}
+	resp = new(types.Teacher)
+	fmt.Println("respbefore: ", resp)
+	j, _ := json.Marshal(resp)
+	fmt.Println("respbefore json:", string(j))
 	err = typex.Convert(teacher.Teacher, resp)
+	fmt.Println("respafter: ", resp)
 	return resp, err
 }

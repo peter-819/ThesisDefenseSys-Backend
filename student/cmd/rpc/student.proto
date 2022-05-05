@@ -10,7 +10,7 @@ message Student {
     string name = 2;
     repeated string paper_keywords = 3;
     string paper_title = 4;
-    string group_id = 5;
+    string defense_id = 5;
     string mentor = 6;
 }
 

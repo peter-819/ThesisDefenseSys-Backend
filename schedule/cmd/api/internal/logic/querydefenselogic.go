@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 
+	"TDS-backend/common/typex"
 	"TDS-backend/schedule/cmd/api/internal/svc"
 	"TDS-backend/schedule/cmd/api/internal/types"
 
@@ -23,8 +24,16 @@ func NewQueryDefenseLogic(ctx context.Context, svcCtx *svc.ServiceContext) Query
 	}
 }
 
-func (l *QueryDefenseLogic) QueryDefense(req types.QueryDefenseReq) (resp *types.QueryDefenseReply, err error) {
+func (l *QueryDefenseLogic) QueryDefense(req types.QueryDefenseReq) (resp *types.Defense, err error) {
 	// todo: add your logic here and delete this line
-
-	return
+	mdefense, err := l.svcCtx.DefenseModel.QueryDefense(req.Id)
+	if err != nil {
+		return nil, err
+	}
+	defense := &types.Defense{}
+	err = typex.Convert(mdefense, defense)
+	if err != nil {
+		return nil, err
+	}
+	return defense, nil
 }

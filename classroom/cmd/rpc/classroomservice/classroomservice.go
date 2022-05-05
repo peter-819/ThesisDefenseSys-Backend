@@ -14,8 +14,10 @@ import (
 
 type (
 	Classroom               = classroom.Classroom
+	Defense                 = classroom.Defense
 	EmptyRequest            = classroom.EmptyRequest
 	EmptyResponse           = classroom.EmptyResponse
+	ModifyClassroomRequest  = classroom.ModifyClassroomRequest
 	QueryByTimeRequest      = classroom.QueryByTimeRequest
 	QueryClassroomRequest   = classroom.QueryClassroomRequest
 	QueryClassroomResponse  = classroom.QueryClassroomResponse
@@ -27,6 +29,8 @@ type (
 		QueryClassroom(ctx context.Context, in *QueryClassroomRequest, opts ...grpc.CallOption) (*Classroom, error)
 		QueryAvailableByTime(ctx context.Context, in *QueryByTimeRequest, opts ...grpc.CallOption) (*QueryClassroomsResponse, error)
 		RemoveClassroom(ctx context.Context, in *RemoveClassroomRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
+		AddClassroom(ctx context.Context, in *Classroom, opts ...grpc.CallOption) (*EmptyRequest, error)
+		ModifyClassroom(ctx context.Context, in *ModifyClassroomRequest, opts ...grpc.CallOption) (*EmptyRequest, error)
 	}
 
 	defaultClassroomService struct {
@@ -58,4 +62,14 @@ func (m *defaultClassroomService) QueryAvailableByTime(ctx context.Context, in *
 func (m *defaultClassroomService) RemoveClassroom(ctx context.Context, in *RemoveClassroomRequest, opts ...grpc.CallOption) (*EmptyResponse, error) {
 	client := classroom.NewClassroomServiceClient(m.cli.Conn())
 	return client.RemoveClassroom(ctx, in, opts...)
+}
+
+func (m *defaultClassroomService) AddClassroom(ctx context.Context, in *Classroom, opts ...grpc.CallOption) (*EmptyRequest, error) {
+	client := classroom.NewClassroomServiceClient(m.cli.Conn())
+	return client.AddClassroom(ctx, in, opts...)
+}
+
+func (m *defaultClassroomService) ModifyClassroom(ctx context.Context, in *ModifyClassroomRequest, opts ...grpc.CallOption) (*EmptyRequest, error) {
+	client := classroom.NewClassroomServiceClient(m.cli.Conn())
+	return client.ModifyClassroom(ctx, in, opts...)
 }

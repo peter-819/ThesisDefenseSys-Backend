@@ -2,7 +2,7 @@
 package types
 
 type Schedule struct {
-	ScheduleId string `json:"schedule_id"`
+	ScheduleId string `json:"schedule_id,optional"`
 	Name       string `json:"name"`
 	StartTime  string `json:"start_time"`
 	EndTime    string `json:"end_time"`
@@ -15,13 +15,12 @@ type Defense struct {
 }
 
 type Teacher struct {
-	Id                string     `json:"id"`
-	Name              string     `json:"name"`
-	IsSecretary       string     `json:"is_secretary"`
-	MaxDefensePerWeek int        `json:"max_defense_per_week"`
-	PreferKeywords    []string   `json:"prefer_keywords"`
-	Schedules         []Schedule `json:"schedules"`
-	Defenses          []Defense  `json:"defenses"`
+	Id                string     `json:"id,optional"`
+	Name              string     `json:"name,optional"`
+	MaxDefensePerWeek int        `json:"max_defense_per_week,optional"`
+	PreferKeywords    []string   `json:"prefer_keywords,optional"`
+	Schedules         []Schedule `json:"schedules,optional"`
+	Defenses          []Defense  `json:"defenses,optional"`
 }
 
 type QueryTeacherReq struct {

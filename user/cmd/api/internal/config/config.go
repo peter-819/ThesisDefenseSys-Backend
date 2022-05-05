@@ -7,9 +7,8 @@ import (
 
 type Config struct {
 	rest.RestConf
-	UserRpc    zrpc.RpcClientConf
-	TeacherRpc zrpc.RpcClientConf
-	Mongodb    struct {
+	UserRpc zrpc.RpcClientConf
+	Mongodb struct {
 		DataSource   string
 		DatabaseName string
 	}

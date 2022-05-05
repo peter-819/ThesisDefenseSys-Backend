@@ -3,19 +3,13 @@ Host: 0.0.0.0
 Port: 8889
 
 Mongodb:
-  DataSource: mongodb+srv://jeromeguan:guanhaobo123@cluster0.n12rm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-  DatabaseName: test
+  DataSource: mongodb://jeromeguan:guanhaobo123@localhost:27017/TDS?&connect=direct&authSource=admin&authMechanism=SCRAM-SHA-256
+  DatabaseName: TDS
 UserRpc:
   Etcd:
     Hosts:
     - 127.0.0.1:2379
     Key: user.rpc
-
-TeacherRpc:
-  Etcd:
-    Hosts:
-    - 127.0.0.1:2379
-    Key: teacher.rpc
 
 Auth:
   AccessSecret: TDS-secret-key

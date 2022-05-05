@@ -8,7 +8,7 @@ type Member struct {
 
 type Student struct {
 	StudentID   string `json:"student_id"`
-	StudentName string `json:"student_name"`
+	StudentName string `json:"student_name,optional"`
 }
 
 type Defense struct {

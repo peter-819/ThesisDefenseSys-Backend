@@ -1,10 +1,16 @@
 type (
-	Classroom {
-		ID        string `json:"id,optional"`
-		Location  string `json:"location"`
-		Name      string `json:"name"`
+	Defense {
+		DefenseId string `json:"defense_id"`
 		StartTime string `json:"start_time"`
 		EndTime   string `json:"end_time"`
+	}
+	Classroom {
+		ID        string    `json:"id,optional"`
+		Location  string    `json:"location"`
+		Name      string    `json:"name"`
+		StartTime string    `json:"start_time"`
+		EndTime   string    `json:"end_time"`
+		Defenses  []Defense `json:"defenses,optional"`
 	}
 	QueryClassroomReq {
 		Id string `path:"id"`

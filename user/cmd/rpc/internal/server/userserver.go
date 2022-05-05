@@ -27,6 +27,11 @@ func (s *UserServer) GetUser(ctx context.Context, in *user.IdRequest) (*user.Use
 	return l.GetUser(in)
 }
 
+func (s *UserServer) GetAllTeachers(ctx context.Context, in *user.EmptyRequest) (*user.GetUsersResponse, error) {
+	l := logic.NewGetAllTeachersLogic(ctx, s.svcCtx)
+	return l.GetAllTeachers(in)
+}
+
 func (s *UserServer) GetToken(ctx context.Context, in *user.TokenRequest) (*user.TokenResponse, error) {
 	l := logic.NewGetTokenLogic(ctx, s.svcCtx)
 	return l.GetToken(in)
@@ -37,7 +42,7 @@ func (s *UserServer) Register(ctx context.Context, in *user.RegisterRequest) (*u
 	return l.Register(in)
 }
 
-func (s *UserServer) RegisterBatch(ctx context.Context, in *user.RegisterBatchRequest) (*user.RegisterBatchResponse, error) {
-	l := logic.NewRegisterBatchLogic(ctx, s.svcCtx)
-	return l.RegisterBatch(in)
+func (s *UserServer) SetSecretary(ctx context.Context, in *user.SetSecretaryRequest) (*user.EmptyResponse, error) {
+	l := logic.NewSetSecretaryLogic(ctx, s.svcCtx)
+	return l.SetSecretary(in)
 }

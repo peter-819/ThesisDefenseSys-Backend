@@ -2,7 +2,8 @@ syntax = "proto3";
 
 package user;
 option go_package = "./user";
-
+message EmptyResponse{}
+message EmptyRequest{}
 message IdRequest {
     string id = 1;
 }
@@ -21,9 +22,8 @@ message UserResponse {
 message TokenRequest {
     string id = 1;
     string role = 2;
-    bool is_secretary = 3;
-    string secret_key = 4;
-    int64 expire_time = 5;
+    string secret_key = 3;
+    int64 expire_time = 4;
 }
 
 message TokenResponse {
@@ -41,18 +41,24 @@ message RegisterResponse {
     string id = 1;
 }
 
-message RegisterBatchRequest {
-    repeated RegisterRequest list = 1;
+message SetSecretaryRequest {
+    string id = 1;
+    bool is_secretary = 2;
 }
 
 message RegisterBatchResponse {
     int32 successCount = 1;
 }
 
+message GetUsersResponse{
+    repeated UserResponse users = 1;
+}
+
 service User {
     rpc getUser(IdRequest) returns(UserResponse);
+    rpc getAllTeachers(EmptyRequest) returns(GetUsersResponse);
     rpc getToken(TokenRequest) returns(TokenResponse);
     
     rpc Register(RegisterRequest) returns(RegisterResponse);
-    rpc RegisterBatch(RegisterBatchRequest) returns(RegisterBatchResponse);
+    rpc SetSecretary(SetSecretaryRequest) returns(EmptyResponse);
 }

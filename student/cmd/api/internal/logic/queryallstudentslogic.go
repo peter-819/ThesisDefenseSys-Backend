@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 
+	"TDS-backend/common/typex"
 	"TDS-backend/student/cmd/api/internal/svc"
 	"TDS-backend/student/cmd/api/internal/types"
 
@@ -31,15 +32,13 @@ func (l *QueryAllStudentsLogic) QueryAllStudents() (resp *types.QueryStudentsRep
 	if err != nil {
 		return nil, err
 	}
-	resp = &types.QueryStudentsReply{}
-	for _, s := range stuRes.List {
-		resp.Students = append(resp.Students, types.Student{
-			Id:            s.Id,
-			Name:          s.Name,
-			PaperKeywords: s.PaperKeywords,
-			PaperTitle:    s.PaperTitle,
-			Mentor:        s.Mentor,
-		})
+	resStu := make([]types.Student, 0)
+	err = typex.Convert(&stuRes.List, &resStu)
+	if err != nil {
+		return nil, err
+	}
+	resp = &types.QueryStudentsReply{
+		Students: resStu,
 	}
 	return resp, nil
 }

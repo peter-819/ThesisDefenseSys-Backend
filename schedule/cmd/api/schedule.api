@@ -5,7 +5,7 @@ type (
 	}
 	Student {
 		StudentID   string `json:"student_id"`
-		StudentName string `json:"student_name"`
+		StudentName string `json:"student_name,optional"`
 	}
 	Defense {
 		Id                string    `json:"id,optional"`
@@ -75,7 +75,7 @@ service Schedule-api {
 	get /schedule/defense/query/scholar/:id (QueryDefenseReq) returns (QueryDefenseReply)
 	
 	@handler queryDefense
-	get /schedule/defense/query/id/:id (QueryDefenseReq) returns (QueryDefenseReply)
+	get /schedule/defense/query/id/:id (QueryDefenseReq) returns (Defense)
 	
 	@handler queryAllDefense
 	get /schedule/defense/query/all returns (QueryDefenseReply)

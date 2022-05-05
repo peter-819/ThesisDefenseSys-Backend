@@ -19,9 +19,10 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserClient interface {
 	GetUser(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*UserResponse, error)
+	GetAllTeachers(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*GetUsersResponse, error)
 	GetToken(ctx context.Context, in *TokenRequest, opts ...grpc.CallOption) (*TokenResponse, error)
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
-	RegisterBatch(ctx context.Context, in *RegisterBatchRequest, opts ...grpc.CallOption) (*RegisterBatchResponse, error)
+	SetSecretary(ctx context.Context, in *SetSecretaryRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
 }
 
 type userClient struct {
@@ -35,6 +36,15 @@ func NewUserClient(cc grpc.ClientConnInterface) UserClient {
 func (c *userClient) GetUser(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*UserResponse, error) {
 	out := new(UserResponse)
 	err := c.cc.Invoke(ctx, "/user.User/getUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userClient) GetAllTeachers(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*GetUsersResponse, error) {
+	out := new(GetUsersResponse)
+	err := c.cc.Invoke(ctx, "/user.User/getAllTeachers", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -59,9 +69,9 @@ func (c *userClient) Register(ctx context.Context, in *RegisterRequest, opts ...
 	return out, nil
 }
 
-func (c *userClient) RegisterBatch(ctx context.Context, in *RegisterBatchRequest, opts ...grpc.CallOption) (*RegisterBatchResponse, error) {
-	out := new(RegisterBatchResponse)
-	err := c.cc.Invoke(ctx, "/user.User/RegisterBatch", in, out, opts...)
+func (c *userClient) SetSecretary(ctx context.Context, in *SetSecretaryRequest, opts ...grpc.CallOption) (*EmptyResponse, error) {
+	out := new(EmptyResponse)
+	err := c.cc.Invoke(ctx, "/user.User/SetSecretary", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -73,9 +83,10 @@ func (c *userClient) RegisterBatch(ctx context.Context, in *RegisterBatchRequest
 // for forward compatibility
 type UserServer interface {
 	GetUser(context.Context, *IdRequest) (*UserResponse, error)
+	GetAllTeachers(context.Context, *EmptyRequest) (*GetUsersResponse, error)
 	GetToken(context.Context, *TokenRequest) (*TokenResponse, error)
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
-	RegisterBatch(context.Context, *RegisterBatchRequest) (*RegisterBatchResponse, error)
+	SetSecretary(context.Context, *SetSecretaryRequest) (*EmptyResponse, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -86,14 +97,17 @@ type UnimplementedUserServer struct {
 func (UnimplementedUserServer) GetUser(context.Context, *IdRequest) (*UserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
 }
+func (UnimplementedUserServer) GetAllTeachers(context.Context, *EmptyRequest) (*GetUsersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllTeachers not implemented")
+}
 func (UnimplementedUserServer) GetToken(context.Context, *TokenRequest) (*TokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetToken not implemented")
 }
 func (UnimplementedUserServer) Register(context.Context, *RegisterRequest) (*RegisterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
-func (UnimplementedUserServer) RegisterBatch(context.Context, *RegisterBatchRequest) (*RegisterBatchResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RegisterBatch not implemented")
+func (UnimplementedUserServer) SetSecretary(context.Context, *SetSecretaryRequest) (*EmptyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetSecretary not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 
@@ -122,6 +136,24 @@ func _User_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interf
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServer).GetUser(ctx, req.(*IdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _User_GetAllTeachers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).GetAllTeachers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.User/getAllTeachers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).GetAllTeachers(ctx, req.(*EmptyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -162,20 +194,20 @@ func _User_Register_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _User_RegisterBatch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RegisterBatchRequest)
+func _User_SetSecretary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetSecretaryRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServer).RegisterBatch(ctx, in)
+		return srv.(UserServer).SetSecretary(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/user.User/RegisterBatch",
+		FullMethod: "/user.User/SetSecretary",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).RegisterBatch(ctx, req.(*RegisterBatchRequest))
+		return srv.(UserServer).SetSecretary(ctx, req.(*SetSecretaryRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -192,6 +224,10 @@ var User_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _User_GetUser_Handler,
 		},
 		{
+			MethodName: "getAllTeachers",
+			Handler:    _User_GetAllTeachers_Handler,
+		},
+		{
 			MethodName: "getToken",
 			Handler:    _User_GetToken_Handler,
 		},
@@ -200,8 +236,8 @@ var User_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _User_Register_Handler,
 		},
 		{
-			MethodName: "RegisterBatch",
-			Handler:    _User_RegisterBatch_Handler,
+			MethodName: "SetSecretary",
+			Handler:    _User_SetSecretary_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

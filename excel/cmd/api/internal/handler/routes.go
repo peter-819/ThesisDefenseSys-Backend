@@ -22,6 +22,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/excel/preview",
 				Handler: PreviewHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/excel/export/:usage",
+				Handler: ExportHandler(serverCtx),
+			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)

@@ -30,7 +30,10 @@ func (l *QueryStudentLogic) QueryStudent(in *student.QueryStudentRequest) (*stud
 	if err != nil {
 		return nil, err
 	}
-	out := &student.QueryStudentResponse{}
-	typex.Convert(s, out.Student)
+	outStudent := &student.Student{}
+	typex.Convert(s, outStudent)
+	out := &student.QueryStudentResponse{
+		Student: outStudent,
+	}
 	return out, nil
 }

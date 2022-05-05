@@ -30,7 +30,7 @@ func (l *QueryTeacherLogic) QueryTeacher(in *teacher.QueryTeacherRequest) (*teac
 	if err != nil {
 		return nil, err
 	}
-	outTeacher := &teacher.Teacher{}
+	outTeacher := new(teacher.Teacher)
 	err = typex.Convert(t, outTeacher)
 	if err != nil {
 		return nil, err

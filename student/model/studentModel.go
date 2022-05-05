@@ -35,7 +35,7 @@ type StudentModel struct {
 
 func NewStudentModel(d *mongox.Database) IStudentModel {
 	return &StudentModel{
-		collection: d.Conn.Collection("StudentCollection"),
+		collection: d.Conn.Collection("Student"),
 	}
 }
 

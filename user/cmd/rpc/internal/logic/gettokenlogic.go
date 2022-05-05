@@ -7,8 +7,8 @@ import (
 	"TDS-backend/user/cmd/rpc/internal/svc"
 	"TDS-backend/user/cmd/rpc/types/user"
 
-	"github.com/zeromicro/go-zero/core/logx"
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetTokenLogic struct {
@@ -32,12 +32,11 @@ func (l *GetTokenLogic) GetToken(in *user.TokenRequest) (*user.TokenResponse, er
 	claims["iat"] = now
 	claims["id"] = in.Id
 	claims["role"] = in.Role
-	claims["is_secretary"] = in.IsSecretary
 	token := jwt.New(jwt.SigningMethodHS256)
 	token.Claims = claims
-	
+
 	tokenStr, err := token.SignedString([]byte(in.SecretKey))
 	return &user.TokenResponse{
 		Token: tokenStr,
-	},err
+	}, err
 }

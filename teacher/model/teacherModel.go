@@ -17,9 +17,9 @@ type Schedule struct {
 	EndTime    time.Time `bson:"end_time" json:"end_time"`
 }
 type Defense struct {
-	DefenseId string `bson:"defense_id" json:"defense_id"`
-	StartTime string `bson:"start_time" json:"start_time"`
-	EndTime   string `bson:"end_time" json:"end_time"`
+	DefenseId string    `bson:"defense_id" json:"defense_id"`
+	StartTime time.Time `bson:"start_time" json:"start_time"`
+	EndTime   time.Time `bson:"end_time" json:"end_time"`
 }
 type Teacher struct {
 	Id                string     `bson:"id,optional" json:"id"`
@@ -48,7 +48,7 @@ type TeacherModel struct {
 
 func NewTeacherModel(d *mongox.Database) ITeacherModel {
 	return &TeacherModel{
-		collection: d.Conn.Collection("TeacherCollection"),
+		collection: d.Conn.Collection("Teacher"),
 	}
 }
 

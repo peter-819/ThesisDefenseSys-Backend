@@ -41,3 +41,13 @@ func (s *ClassroomServiceServer) RemoveClassroom(ctx context.Context, in *classr
 	l := logic.NewRemoveClassroomLogic(ctx, s.svcCtx)
 	return l.RemoveClassroom(in)
 }
+
+func (s *ClassroomServiceServer) AddClassroom(ctx context.Context, in *classroom.Classroom) (*classroom.EmptyRequest, error) {
+	l := logic.NewAddClassroomLogic(ctx, s.svcCtx)
+	return l.AddClassroom(in)
+}
+
+func (s *ClassroomServiceServer) ModifyClassroom(ctx context.Context, in *classroom.ModifyClassroomRequest) (*classroom.EmptyRequest, error) {
+	l := logic.NewModifyClassroomLogic(ctx, s.svcCtx)
+	return l.ModifyClassroom(in)
+}

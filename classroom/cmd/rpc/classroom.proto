@@ -6,12 +6,18 @@ option go_package = "./classroom";
 message EmptyRequest {}
 message EmptyResponse {}
 
+message Defense {
+    string defense_id = 1;
+    string start_time = 2;
+    string end_time = 3;
+}
 message Classroom {
     string id = 1;
     string location = 2;
     string name = 3;
     string start_time = 4;
     string end_time = 5;
+    repeated Defense defenses = 6;
 }
 
 message QueryClassroomRequest {
@@ -32,10 +38,16 @@ message QueryByTimeRequest {
 message RemoveClassroomRequest {
     string id = 1;
 }
+message ModifyClassroomRequest {
+    string id = 1;
+    Classroom new_classroom = 2;
+}
 service ClassroomService {
     rpc QueryAllClassrooms(EmptyRequest) returns(QueryClassroomsResponse);
     rpc QueryClassroom(QueryClassroomRequest) returns(Classroom);
 
     rpc QueryAvailableByTime(QueryByTimeRequest) returns(QueryClassroomsResponse);
     rpc RemoveClassroom(RemoveClassroomRequest) returns(EmptyResponse);
+    rpc AddClassroom(Classroom) returns(EmptyRequest);
+    rpc ModifyClassroom(ModifyClassroomRequest) returns(EmptyRequest);
 }

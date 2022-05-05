@@ -21,3 +21,30 @@ type RegisterReq struct {
 type RegisterReply struct {
 	Token string `json:"token,default=''"`
 }
+
+type UserInfo struct {
+	Id   string `json:"id"`
+	Role string `json:"role"`
+	Name string `json:"name"`
+}
+
+type QueryUserReq struct {
+	Id string `path:"id"`
+}
+
+type QueryUsersResp struct {
+	Users []UserInfo `json:"users"`
+}
+
+type SetSecretaryReq struct {
+	Id          string `json:"id"`
+	IsSecretary bool   `json:"is_secretary"`
+}
+
+type VerifyTokenReq struct {
+}
+
+type VerifyTokenResp struct {
+	UserId string `json:"userId"`
+	Ok     bool   `json:"ok"`
+}

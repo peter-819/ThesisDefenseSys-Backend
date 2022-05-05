@@ -30,13 +30,5 @@ func (l *RouteheaderLogic) Routeheader(req types.HeaderReq) (resp *types.HeaderR
 	if err != nil {
 		return resp, err
 	}
-	if l.ctx.Value("is_secretary").(bool) && l.ctx.Value("role").(string) == "Teacher" {
-		secretaryResp := &types.HeaderReply{}
-		err = l.svcCtx.RouteModel.GetHeader("Secretary", secretaryResp)
-		if err != nil {
-			return resp, err
-		}
-		resp.Headers = append(resp.Headers, secretaryResp.Headers...)
-	}
-	return resp,err
+	return resp, err
 }

@@ -25,13 +25,11 @@ func NewGetUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUserLo
 
 func (l *GetUserLogic) GetUser(in *user.IdRequest) (*user.UserResponse, error) {
 	// todo: add your logic here and delete this line
-	
-
-	info, err := l.svcCtx.UserModel.GetUser(in.Id)   
+	info, err := l.svcCtx.UserModel.GetUser(in.Id)
 	return &user.UserResponse{
-		Id:   info.ID,
-		Name: info.Name,
-		Role: info.Role,
+		Id:       info.ID,
+		Name:     info.Name,
+		Role:     info.Role,
 		Password: info.Password,
 	}, err
 }

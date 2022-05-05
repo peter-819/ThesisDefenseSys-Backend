@@ -5,6 +5,20 @@ networks:
     driver: bridge
 
 services:
+  mongo:
+    image: mongo
+    container_name: mongodb_container
+    restart: always
+    ports:
+        - '27017:27017'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    volumes:
+      - ./mongo/mongo_data:/data/db
+    networks:
+      - app-tier
+
   etcd:
     image: 'bitnami/etcd:latest'
     environment:
@@ -17,6 +31,9 @@ services:
       - app-tier
 
   user_rpc:
+    build: 
+      context: .
+      dockerfile: ./user/cmd/rpc/Dockerfile
     container_name: user_rpc_container
     networks:
       - app-tier
@@ -26,19 +43,12 @@ services:
       - "9001"
     depends_on:
       - etcd
-
-  excel_rpc:
-    container_name: excel_rpc_container
-    networks:
-      - app-tier
-    image: excel_rpc:v1
-    restart: always
-    expose:
-      - "9002"
-    depends_on:
-      - etcd
+      - mongo
 
   teacher_rpc:
+    build: 
+      context: .
+      dockerfile: ./teacher/cmd/rpc/Dockerfile
     container_name: teacher_rpc_container
     networks:
       - app-tier
@@ -48,8 +58,12 @@ services:
       - "9003"
     depends_on:
       - etcd
+      - mongo
 
   classroom_rpc:
+    build: 
+      context: .
+      dockerfile: ./classroom/cmd/rpc/Dockerfile
     container_name: classroom_rpc_container
     networks:
       - app-tier
@@ -59,8 +73,12 @@ services:
       - "9004"
     depends_on:
       - etcd
+      - mongo
  
   student_rpc:
+    build: 
+      context: .
+      dockerfile: ./student/cmd/rpc/Dockerfile
     container_name: student_rpc_container
     networks:
       - app-tier
@@ -70,8 +88,12 @@ services:
       - "9005"
     depends_on:
       - etcd
+      - mongo
 
   route_api:
+    build: 
+      context: .
+      dockerfile: ./route/cmd/api/Dockerfile
     container_name: route_api_container
     networks:
       - app-tier
@@ -79,8 +101,13 @@ services:
     restart: always
     expose:
       - "8890"
+    depends_on:
+      - mongo
       
   user_api:
+    build: 
+      context: .
+      dockerfile: ./user/cmd/api/Dockerfile
     container_name: user_api_container
     networks:
       - app-tier
@@ -90,20 +117,28 @@ services:
       - "8889"
     depends_on:
       - user_rpc
+      - teacher_rpc
     
-  admin_api:
-    container_name: admin_api_container
+  excel_api:
+    build: 
+      context: .
+      dockerfile: ./excel/cmd/api/Dockerfile
+    container_name: excel_api_container
     networks:
       - app-tier
-    image: admin_api:v1
+    image: excel_api:v1
     restart: always
     expose:
-      - "8891"
+      - "9002"
     depends_on:
-      - excel_rpc
-      - user_rpc
+      - student_rpc
+      - teacher_rpc
+      - classroom_rpc
 
   schedule_api:
+    build: 
+      context: .
+      dockerfile: ./schedule/cmd/api/Dockerfile
     container_name: schedule_api_container
     networks:
       - app-tier
@@ -115,8 +150,12 @@ services:
       - student_rpc
       - classroom_rpc
       - teacher_rpc
+      - mongo
 
   teacher_api:
+    build: 
+      context: .
+      dockerfile: ./teacher/cmd/api/Dockerfile
     container_name: teacher_api_container
     networks:
       - app-tier
@@ -128,6 +167,9 @@ services:
       - teacher_rpc
   
   classroom_api:
+    build: 
+      context: .
+      dockerfile: ./classroom/cmd/api/Dockerfile
     container_name: classroom_api_container
     networks:
       - app-tier
@@ -139,6 +181,9 @@ services:
       - classroom_rpc
 
   student_api:
+    build: 
+      context: .
+      dockerfile: ./student/cmd/api/Dockerfile
     container_name: student_api_container
     networks:
       - app-tier

@@ -6,8 +6,12 @@ type Student struct {
 	Name          string   `json:"name"`
 	PaperKeywords []string `json:"paper_keywords"`
 	PaperTitle    string   `json:"paper_title"`
-	GroupId       string   `json:"group_id"`
+	DefenseId     string   `json:"defense_id"`
 	Mentor        string   `json:"mentor"`
+}
+
+type QueryStudentReq struct {
+	Id string `path:"id"`
 }
 
 type QueryStudentsReply struct {
@@ -15,5 +19,5 @@ type QueryStudentsReply struct {
 }
 
 type RemoveStudentReq struct {
-	Id string `path:"id"`
+	Id string `json:"id"`
 }

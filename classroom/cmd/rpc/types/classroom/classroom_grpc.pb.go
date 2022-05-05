@@ -22,6 +22,8 @@ type ClassroomServiceClient interface {
 	QueryClassroom(ctx context.Context, in *QueryClassroomRequest, opts ...grpc.CallOption) (*Classroom, error)
 	QueryAvailableByTime(ctx context.Context, in *QueryByTimeRequest, opts ...grpc.CallOption) (*QueryClassroomsResponse, error)
 	RemoveClassroom(ctx context.Context, in *RemoveClassroomRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
+	AddClassroom(ctx context.Context, in *Classroom, opts ...grpc.CallOption) (*EmptyRequest, error)
+	ModifyClassroom(ctx context.Context, in *ModifyClassroomRequest, opts ...grpc.CallOption) (*EmptyRequest, error)
 }
 
 type classroomServiceClient struct {
@@ -68,6 +70,24 @@ func (c *classroomServiceClient) RemoveClassroom(ctx context.Context, in *Remove
 	return out, nil
 }
 
+func (c *classroomServiceClient) AddClassroom(ctx context.Context, in *Classroom, opts ...grpc.CallOption) (*EmptyRequest, error) {
+	out := new(EmptyRequest)
+	err := c.cc.Invoke(ctx, "/classroom.ClassroomService/AddClassroom", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *classroomServiceClient) ModifyClassroom(ctx context.Context, in *ModifyClassroomRequest, opts ...grpc.CallOption) (*EmptyRequest, error) {
+	out := new(EmptyRequest)
+	err := c.cc.Invoke(ctx, "/classroom.ClassroomService/ModifyClassroom", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ClassroomServiceServer is the server API for ClassroomService service.
 // All implementations must embed UnimplementedClassroomServiceServer
 // for forward compatibility
@@ -76,6 +96,8 @@ type ClassroomServiceServer interface {
 	QueryClassroom(context.Context, *QueryClassroomRequest) (*Classroom, error)
 	QueryAvailableByTime(context.Context, *QueryByTimeRequest) (*QueryClassroomsResponse, error)
 	RemoveClassroom(context.Context, *RemoveClassroomRequest) (*EmptyResponse, error)
+	AddClassroom(context.Context, *Classroom) (*EmptyRequest, error)
+	ModifyClassroom(context.Context, *ModifyClassroomRequest) (*EmptyRequest, error)
 	mustEmbedUnimplementedClassroomServiceServer()
 }
 
@@ -94,6 +116,12 @@ func (UnimplementedClassroomServiceServer) QueryAvailableByTime(context.Context,
 }
 func (UnimplementedClassroomServiceServer) RemoveClassroom(context.Context, *RemoveClassroomRequest) (*EmptyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveClassroom not implemented")
+}
+func (UnimplementedClassroomServiceServer) AddClassroom(context.Context, *Classroom) (*EmptyRequest, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddClassroom not implemented")
+}
+func (UnimplementedClassroomServiceServer) ModifyClassroom(context.Context, *ModifyClassroomRequest) (*EmptyRequest, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ModifyClassroom not implemented")
 }
 func (UnimplementedClassroomServiceServer) mustEmbedUnimplementedClassroomServiceServer() {}
 
@@ -180,6 +208,42 @@ func _ClassroomService_RemoveClassroom_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ClassroomService_AddClassroom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Classroom)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClassroomServiceServer).AddClassroom(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/classroom.ClassroomService/AddClassroom",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClassroomServiceServer).AddClassroom(ctx, req.(*Classroom))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClassroomService_ModifyClassroom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ModifyClassroomRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClassroomServiceServer).ModifyClassroom(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/classroom.ClassroomService/ModifyClassroom",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClassroomServiceServer).ModifyClassroom(ctx, req.(*ModifyClassroomRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ClassroomService_ServiceDesc is the grpc.ServiceDesc for ClassroomService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -202,6 +266,14 @@ var ClassroomService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RemoveClassroom",
 			Handler:    _ClassroomService_RemoveClassroom_Handler,
+		},
+		{
+			MethodName: "AddClassroom",
+			Handler:    _ClassroomService_AddClassroom_Handler,
+		},
+		{
+			MethodName: "ModifyClassroom",
+			Handler:    _ClassroomService_ModifyClassroom_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

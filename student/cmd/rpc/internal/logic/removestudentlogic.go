@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 
+	"TDS-backend/common/errorx"
 	"TDS-backend/student/cmd/rpc/internal/svc"
 	"TDS-backend/student/cmd/rpc/types/student"
 
@@ -25,6 +26,13 @@ func NewRemoveStudentLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Rem
 
 func (l *RemoveStudentLogic) RemoveStudent(in *student.RemoveStudentRequest) (*student.EmptyResponse, error) {
 	// todo: add your logic here and delete this line
-	err := l.svcCtx.StudentModel.RemoveStudent(in.Id)
+	stu, err := l.svcCtx.StudentModel.QueryStudent(in.Id)
+	if err != nil {
+		return nil, errorx.NewDefaultError("找不到学生")
+	}
+	if stu.DefenseId != "" {
+		return nil, errorx.NewDefaultError("请先移除该学生参加的答辩")
+	}
+	err = l.svcCtx.StudentModel.RemoveStudent(in.Id)
 	return &student.EmptyResponse{}, err
 }

@@ -47,7 +47,7 @@ type DefenseModel struct {
 
 func NewDefenseModel(d *mongox.Database) IDefenseModel {
 	return &DefenseModel{
-		collection: d.Conn.Collection("DefenseSchedule"),
+		collection: d.Conn.Collection("Defense"),
 	}
 }
 
@@ -55,6 +55,7 @@ func (m *DefenseModel) InsertDefense(defense *Defense) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
+	defense.Id = primitive.NewObjectID()
 	res, err := m.collection.InsertOne(ctx, defense)
 	if err != nil {
 		return "", errorx.NewDefaultError("创建答辩失败: " + err.Error())

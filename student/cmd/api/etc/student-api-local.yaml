@@ -15,8 +15,8 @@ ExcelRpc:
     Key: excel.rpc
 
 Mongodb:
-  DataSource: mongodb+srv://jeromeguan:guanhaobo123@cluster0.n12rm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-  DatabaseName: test
+  DataSource: mongodb://jeromeguan:guanhaobo123@localhost:27017/TDS?&connect=direct&authSource=admin&authMechanism=SCRAM-SHA-256
+  DatabaseName: TDS
 Auth:
   AccessSecret: TDS-secret-key
   AccessExpire: 86400

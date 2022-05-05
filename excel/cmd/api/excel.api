@@ -2,11 +2,25 @@ type (
 	ImportExcelReq {
 		Usage string `path:"usage"`
 	}
+	ImportResult {
+		Id           string `json:"id"`
+		Name         string `json:"name"`
+		ErrorMessage string `json:"error_message"`
+	}
 	ImportExcelReply {
-		Count int `json:"count"`
+		TotalCount   int            `json:"total_count"`
+		SuccessCount int            `json:"success_count"`
+		ErrorResults []ImportResult `json:"error_results"`
 	}
 	PreviewExcelReply {
 		Data [][]string `json:"data"`
+	}
+)
+type (
+	ExportExcelReq {
+		Usage string `path:"usage"`
+	}
+	ExportExcelResp {
 	}
 )
 @server(
@@ -18,4 +32,6 @@ service Excel-api {
 	@handler Preview
 	post /excel/preview returns (PreviewExcelReply)
 	
+	@handler Export
+	get /excel/export/:usage (ExportExcelReq) returns (ExportExcelResp)
 }

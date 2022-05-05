@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"TDS-backend/common/errorx"
-	"TDS-backend/teacher/cmd/rpc/teacherservice"
 	"TDS-backend/user/cmd/api/internal/svc"
 	"TDS-backend/user/cmd/api/internal/types"
 	"TDS-backend/user/cmd/rpc/user"
@@ -39,22 +38,11 @@ func (l *LoginLogic) Login(req types.LoginReq) (resp *types.LoginReply, err erro
 	if userInfo.Password != req.Password {
 		return nil, errorx.NewDefaultError("密码错误")
 	}
-	IsSecretary := false
-	if userInfo.Role == "Teacher" {
-		rpcRes, err := l.svcCtx.TeacherRpc.QueryTeacher(l.ctx, &teacherservice.QueryTeacherRequest{
-			Id: req.UserID,
-		})
-		if err != nil {
-			return nil, errorx.NewDefaultError("无教师信息:" + err.Error())
-		}
-		IsSecretary = (rpcRes.Teacher.IsSecretary == "yes")
-	}
 	tokenRes, err := l.svcCtx.UserRpc.GetToken(l.ctx, &user.TokenRequest{
-		Id:          userInfo.Id,
-		Role:        userInfo.Role,
-		ExpireTime:  l.svcCtx.Config.Auth.AccessExpire,
-		SecretKey:   l.svcCtx.Config.Auth.AccessSecret,
-		IsSecretary: IsSecretary,
+		Id:         userInfo.Id,
+		Role:       userInfo.Role,
+		ExpireTime: l.svcCtx.Config.Auth.AccessExpire,
+		SecretKey:  l.svcCtx.Config.Auth.AccessSecret,
 	})
 	return &types.LoginReply{
 		Token: tokenRes.Token,

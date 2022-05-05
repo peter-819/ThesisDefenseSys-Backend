@@ -11,20 +11,27 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+type Defense struct {
+	DefenseId string    `bson:"defense_id" json:"defense_id"`
+	StartTime time.Time `bson:"start_time" json:"start_time"`
+	EndTime   time.Time `bson:"end_time" json:"end_time"`
+}
 type Classroom struct {
-	ID        primitive.ObjectID `bson:"_id" json:"id"`
+	Id        primitive.ObjectID `bson:"_id" json:"id"`
 	Name      string             `bson:"name" json:"name"`
 	Location  string             `bson:"location" json:"location"`
 	StartTime time.Time          `bson:"start_time" json:"start_time"`
 	EndTime   time.Time          `bson:"end_time" json:"end_time"`
+	Defenses  []Defense          `bson:"defenses" json:"defenses"`
 }
 
 type IClassroomModel interface {
 	RemoveClassroom(id string) error
-	InsertClassroom(classroom *Classroom) error
+	AddClassroom(classroom *Classroom) error
 	FindClassroomByIdHex(id primitive.ObjectID) (*Classroom, error)
 	FindClassroomByIdString(id string) (*Classroom, error)
 	QueryAllClassrooms() ([]Classroom, error)
+	ModifyClassroom(id string, classroom *Classroom) error
 	QueryAvailableByTime(start time.Time, end time.Time) ([]Classroom, error)
 }
 
@@ -37,7 +44,27 @@ func NewClassroomModel(d *mongox.Database) IClassroomModel {
 		collection: d.Conn.Collection("Classroom"),
 	}
 }
+func (m *ClassroomModel) ModifyClassroom(id string, classroom *Classroom) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
 
+	hexId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return errorx.NewDefaultError("修改教室ID错误: " + err.Error())
+	}
+	if !classroom.Id.IsZero() && id != classroom.Id.Hex() {
+		return errorx.NewDefaultError("修改教室失败: 不可以修改ID")
+	}
+	filter := bson.M{"_id": hexId}
+	update := bson.M{
+		"$set": classroom,
+	}
+	update_res := m.collection.FindOneAndUpdate(ctx, filter, update)
+	if update_res.Err() != nil {
+		return errorx.NewDefaultError("教室修改失败: " + update_res.Err().Error())
+	}
+	return nil
+}
 func (m *ClassroomModel) RemoveClassroom(id string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
@@ -55,10 +82,10 @@ func (m *ClassroomModel) RemoveClassroom(id string) error {
 	return nil
 }
 
-func (m *ClassroomModel) InsertClassroom(classroom *Classroom) error {
+func (m *ClassroomModel) AddClassroom(classroom *Classroom) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
-	classroom.ID = primitive.NewObjectID()
+	classroom.Id = primitive.NewObjectID()
 	_, err := m.collection.InsertOne(ctx, classroom)
 	if err != nil {
 		return errorx.NewDefaultError("创建教室失败:" + err.Error())

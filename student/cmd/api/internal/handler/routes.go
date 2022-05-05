@@ -23,9 +23,14 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: QueryNondefensedStudentsHandler(serverCtx),
 			},
 			{
-				Method:  http.MethodGet,
-				Path:    "/student/remove/:id",
+				Method:  http.MethodPost,
+				Path:    "/student/remove",
 				Handler: RemoveStudentHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/student/query/id/:id",
+				Handler: QueryStudentHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),

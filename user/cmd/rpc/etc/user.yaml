@@ -1,8 +1,8 @@
 Name: user.rpc
 ListenOn: 0.0.0.0:9001
 Mongodb:
-  DataSource: mongodb+srv://jeromeguan:guanhaobo123@cluster0.n12rm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-  DatabaseName: test
+  DataSource: mongodb://jeromeguan:guanhaobo123@mongo:27017/TDS?&connect=direct&authSource=admin&authMechanism=SCRAM-SHA-256
+  DatabaseName: TDS
 Etcd:
   Hosts:
   - etcd:2379

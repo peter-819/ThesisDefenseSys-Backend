@@ -24,4 +24,30 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodGet,
+				Path:    "/user/verify/token",
+				Handler: VerifyTokenHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/user/set/secretary",
+				Handler: SetSecretaryHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/user/query/id/:id",
+				Handler: GetUserInfoHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/user/query/teachers",
+				Handler: GetTeachersHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+	)
 }

@@ -5,12 +5,14 @@ import (
 	"reflect"
 	"strings"
 
+	"TDS-backend/classroom/cmd/rpc/classroomservice"
 	"TDS-backend/common/errorx"
 	"TDS-backend/common/excelx"
 	"TDS-backend/excel/cmd/api/internal/svc"
 	"TDS-backend/excel/cmd/api/internal/types"
 	"TDS-backend/student/cmd/rpc/studentservice"
 	"TDS-backend/teacher/cmd/rpc/teacherservice"
+	"TDS-backend/user/cmd/rpc/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -75,7 +77,6 @@ func getProcessFunc(usage string) func(interface{}, map[string]int, []string) er
 	}
 }
 func (l *ImportLogic) Import(req *types.ImportExcelReq) (resp *types.ImportExcelReply, err error) {
-	resp = &types.ImportExcelReply{}
 
 	data, err := l.ExcelInfo.ParseExcelData()
 	if err != nil {
@@ -89,50 +90,114 @@ func (l *ImportLogic) Import(req *types.ImportExcelReq) (resp *types.ImportExcel
 	for i, header := range data[0] {
 		headerMap[header] = i
 	}
+	errorResult := make([]types.ImportResult, 0)
 
 	for _, row := range data[1:] {
 		switch req.Usage {
 		case "classroom":
-			// cla := &classroomservice.Classroom{}
-			// err := process(cla, headerMap, row)
-			// if err != nil {
-			// 	return nil, err
-			// }
-			// _, err = l.svcCtx.ClassroomRpc(l.ctx, &teacherservice.AddTeacherRequest{
-			// 	Teacher: tea,
-			// })
-			// if err != nil {
-			// 	return nil, errorx.NewDefaultError("学生信息错误: " + err.Error())
-			// }
+			cla := &classroomservice.Classroom{}
+			err := process(cla, headerMap, row)
+			if err != nil {
+				errorResult = append(errorResult, types.ImportResult{
+					Name:         cla.Location + " " + cla.Name,
+					Id:           "",
+					ErrorMessage: err.Error(),
+				})
+				continue
+			}
+			_, err = l.svcCtx.ClassroomRpc.AddClassroom(l.ctx, cla)
+			if err != nil {
+				errorResult = append(errorResult, types.ImportResult{
+					Name:         cla.Location + " " + cla.Name,
+					Id:           "",
+					ErrorMessage: err.Error(),
+				})
+				continue
+			}
 		case "student":
 			stu := &studentservice.Student{}
 			err := process(stu, headerMap, row)
 			if err != nil {
-				return nil, err
+				errorResult = append(errorResult, types.ImportResult{
+					Name:         stu.Name,
+					Id:           stu.Id,
+					ErrorMessage: "该学生未注册账户！",
+				})
+				continue
+			}
+			userRes, err := l.svcCtx.UserRpc.GetUser(l.ctx, &user.IdRequest{Id: stu.Id})
+			if err != nil || userRes.Name != stu.Name {
+				errorResult = append(errorResult, types.ImportResult{
+					Name:         stu.Name,
+					Id:           stu.Id,
+					ErrorMessage: "该学生未注册账户！",
+				})
+				continue
 			}
 			_, err = l.svcCtx.StudentRpc.AddStudent(l.ctx, &studentservice.AddStudentRequest{
 				Student: stu,
 			})
 			if err != nil {
-				return nil, errorx.NewDefaultError("学生信息错误: " + err.Error())
+				errorResult = append(errorResult, types.ImportResult{
+					Name:         stu.Name,
+					Id:           stu.Id,
+					ErrorMessage: err.Error(),
+				})
+				continue
 			}
 		case "teacher":
 			tea := &teacherservice.Teacher{}
 			err := process(tea, headerMap, row)
 			if err != nil {
-				return nil, err
+				errorResult = append(errorResult, types.ImportResult{
+					Name:         tea.Name,
+					Id:           tea.Id,
+					ErrorMessage: err.Error(),
+				})
+				continue
+			}
+			userRes, err := l.svcCtx.UserRpc.GetUser(l.ctx, &user.IdRequest{Id: tea.Id})
+			if err != nil || userRes.Name != tea.Name {
+				errorResult = append(errorResult, types.ImportResult{
+					Name:         tea.Name,
+					Id:           tea.Id,
+					ErrorMessage: "该教师未注册账户！",
+				})
+				continue
 			}
 			_, err = l.svcCtx.TeacherRpc.AddTeacher(l.ctx, &teacherservice.AddTeacherRequest{
 				Teacher: tea,
 			})
 			if err != nil {
-				return nil, errorx.NewDefaultError("教师信息错误: " + err.Error())
+				errorResult = append(errorResult, types.ImportResult{
+					Name:         tea.Name,
+					Id:           tea.Id,
+					ErrorMessage: err.Error(),
+				})
+				continue
 			}
 		case "user":
+			u := &user.RegisterRequest{}
+			err := process(u, headerMap, row)
+			if err != nil {
+				return nil, err
+			}
+			_, err = l.svcCtx.UserRpc.Register(l.ctx, u)
+			if err != nil {
+				errorResult = append(errorResult, types.ImportResult{
+					Name:         u.Name,
+					Id:           u.Id,
+					ErrorMessage: err.Error(),
+				})
+			}
 		default:
 			return nil, errorx.NewDefaultError("错误上传方法: " + req.Usage)
 		}
-
+	}
+	resp = &types.ImportExcelReply{
+		TotalCount:   len(data) - 1,
+		SuccessCount: len(data) - 1 - len(errorResult),
+		ErrorResults: errorResult,
 	}
 	return resp, nil
 }
