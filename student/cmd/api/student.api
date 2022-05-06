@@ -19,17 +19,17 @@ type (
 )
 
 @server(
-	jwt: Auth
+	prefix: student
 )
 service Student-api {
 	@handler QueryAllStudents
-	get /student/query/all returns (QueryStudentsReply)
+	get /query/all returns (QueryStudentsReply)
 	@handler QueryNondefensedStudents
-	get /student/query/nondefensed returns (QueryStudentsReply)
+	get /query/nondefensed returns (QueryStudentsReply)
 	
 	@handler RemoveStudent
-	post /student/remove (RemoveStudentReq)
+	post /remove (RemoveStudentReq)
 	@handler QueryStudent
-	get /student/query/id/:id (QueryStudentReq) returns (Student)
+	get /query/id/:id (QueryStudentReq) returns (Student)
 	
 }

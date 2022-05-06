@@ -30,15 +30,15 @@ type (
 	}
 )
 @server(
-	jwt: Auth
+	prefix: teacher
 )
 service Teacher-api {
 	@handler QueryTeacher
-	get /teacher/query/:id (QueryTeacherReq) returns (Teacher)
+	get /query/:id (QueryTeacherReq) returns (Teacher)
 	
 	@handler ModifyTeacher
-	post /teacher/modify (ModifyTeacherReq)
+	post /modify (ModifyTeacherReq)
 	@handler QueryAllTeachers
-	get /teacher/query/all returns (QueryTeachersReq)
+	get /query/all returns (QueryTeachersReq)
 	
 }

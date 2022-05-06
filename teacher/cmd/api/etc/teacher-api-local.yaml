@@ -2,10 +2,6 @@ Name: Teacher-api
 Host: 0.0.0.0
 Port: 8893
 
-Auth:
-  AccessSecret: TDS-secret-key
-  AccessExpire: 86400
-  
 TeacherRpc:
   Etcd:
     Hosts:

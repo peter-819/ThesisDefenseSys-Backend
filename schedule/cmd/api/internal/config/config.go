@@ -1,20 +1,17 @@
 package config
 
-import(
+import (
 	"github.com/zeromicro/go-zero/rest"
-    "github.com/zeromicro/go-zero/zrpc"
+	"github.com/zeromicro/go-zero/zrpc"
 )
+
 type Config struct {
 	rest.RestConf
-    ClassroomRpc zrpc.RpcClientConf
-    TeacherRpc zrpc.RpcClientConf
-    StudentRpc zrpc.RpcClientConf
-	Auth struct {
-		AccessSecret string
-		AccessExpire int64
-	}
-	Mongodb struct {
-		DataSource string
+	ClassroomRpc zrpc.RpcClientConf
+	TeacherRpc   zrpc.RpcClientConf
+	StudentRpc   zrpc.RpcClientConf
+	Mongodb      struct {
+		DataSource   string
 		DatabaseName string
 	}
 }

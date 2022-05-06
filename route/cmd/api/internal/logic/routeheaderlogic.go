@@ -2,7 +2,9 @@ package logic
 
 import (
 	"context"
+	"fmt"
 
+	"TDS-backend/common/authx"
 	"TDS-backend/route/cmd/api/internal/svc"
 	"TDS-backend/route/cmd/api/internal/types"
 
@@ -26,7 +28,9 @@ func NewRouteheaderLogic(ctx context.Context, svcCtx *svc.ServiceContext) Routeh
 func (l *RouteheaderLogic) Routeheader(req types.HeaderReq) (resp *types.HeaderReply, err error) {
 	// todo: add your logic here and delete this line
 	resp = &types.HeaderReply{}
-	err = l.svcCtx.RouteModel.GetHeader(l.ctx.Value("role").(string), resp)
+	fmt.Println("x-user-id: ", l.ctx.Value(authx.IdCtxKey).(string))
+	fmt.Println("x-user-role: ", l.ctx.Value(authx.RoleCtxKey).(string))
+	err = l.svcCtx.RouteModel.GetHeader(l.ctx.Value(authx.RoleCtxKey).(string), resp)
 	if err != nil {
 		return resp, err
 	}

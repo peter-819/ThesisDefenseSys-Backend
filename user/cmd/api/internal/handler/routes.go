@@ -14,13 +14,8 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodPost,
-				Path:    "/user/login",
+				Path:    "/login",
 				Handler: loginHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPost,
-				Path:    "/user/register",
-				Handler: registerHandler(serverCtx),
 			},
 		},
 	)
@@ -28,24 +23,35 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
-				Method:  http.MethodGet,
-				Path:    "/user/verify/token",
-				Handler: VerifyTokenHandler(serverCtx),
+				Method:  http.MethodPost,
+				Path:    "/register",
+				Handler: registerHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/user/set/secretary",
+				Path:    "/set/secretary",
 				Handler: SetSecretaryHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/user/query/id/:id",
+				Path:    "/query/id/:id",
 				Handler: GetUserInfoHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/user/query/teachers",
+				Path:    "/query/teachers",
 				Handler: GetTeachersHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/user"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodGet,
+				Path:    "/verify/token",
+				Handler: VerifyTokenHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),

@@ -14,15 +14,15 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodGet,
-				Path:    "/route/menu",
+				Path:    "/menu",
 				Handler: routemenuHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/route/header",
+				Path:    "/header",
 				Handler: routeheaderHandler(serverCtx),
 			},
 		},
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/route"),
 	)
 }

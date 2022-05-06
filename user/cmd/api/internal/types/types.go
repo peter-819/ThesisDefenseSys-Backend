@@ -45,6 +45,7 @@ type VerifyTokenReq struct {
 }
 
 type VerifyTokenResp struct {
-	UserId string `json:"userId"`
-	Ok     bool   `json:"ok"`
+	UserId   string `json:"userId"`
+	UserRole string `json:"userRole"`
+	Ok       bool   `json:"ok"`
 }

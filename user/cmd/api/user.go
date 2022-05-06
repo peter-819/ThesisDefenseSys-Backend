@@ -4,11 +4,12 @@ import (
 	"flag"
 	"fmt"
 
-	"net/http"
+	"TDS-backend/common/authx"
 	"TDS-backend/common/errorx"
 	"TDS-backend/user/cmd/api/internal/config"
 	"TDS-backend/user/cmd/api/internal/handler"
 	"TDS-backend/user/cmd/api/internal/svc"
+	"net/http"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
@@ -27,6 +28,7 @@ func main() {
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
 
+	server.Use(authx.NewAuthInfoToCtxMiddleware().Handle)
 	handler.RegisterHandlers(server, ctx)
 
 	httpx.SetErrorHandler(func(err error) (int, interface{}) {

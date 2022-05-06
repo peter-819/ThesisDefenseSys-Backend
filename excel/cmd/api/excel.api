@@ -24,14 +24,14 @@ type (
 	}
 )
 @server(
-	jwt: Auth
+	prefix: excel
 )
 service Excel-api {
 	@handler Import
-	post /excel/import/:usage (ImportExcelReq) returns (ImportExcelReply)
+	post /import/:usage (ImportExcelReq) returns (ImportExcelReply)
 	@handler Preview
-	post /excel/preview returns (PreviewExcelReply)
+	post /preview returns (PreviewExcelReply)
 	
 	@handler Export
-	get /excel/export/:usage (ExportExcelReq) returns (ExportExcelResp)
+	get /export/:usage (ExportExcelReq) returns (ExportExcelResp)
 }

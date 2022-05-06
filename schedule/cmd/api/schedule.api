@@ -32,70 +32,26 @@ type (
 	RemoveDefenseReq {
 		ID string `json:"id"`
 	}
-	QueryAvailableReq {
-		Students  []string `json:"students"`
-		Committee []string `json:"committee"`
-		Classroom string   `json:"classroom"`
-	}
-	QueryAvailableReply {
-		Students   []string      `json:"students"`
-		Committee  []TeacherInfo `json:"committee"`
-		Classrooms []string      `json:"classrooms"`
-	}
-)
-
-type (
-	QueryAvailableClassroomsReq {
-		DefenseId string `path:"id"`
-	}
-	ClassroomInfo {
-		Name string `json:"name"`
-		Id   string `json:"id"`
-	}
-	QueryAvailableClassroomsResp {
-		Classrooms []ClassroomInfo `json:"classrooms"`
-	}
-
-	QueryAvailableTeachersReq {
-		DefenseId string `path:"id"`
-	}
-	TeacherInfo {
-		Name string `json:"name"`
-		Id   string `json:"id"`
-	}
-	QueryAvailableTeachersResp {
-		Teachers []TeacherInfo `json:"teachers"`
-	}
 )
 @server(
-	jwt: Auth
+	prefix: defense
 )
 service Schedule-api {
 	@handler queryDefenseTeacherStudent
-	get /schedule/defense/query/scholar/:id (QueryDefenseReq) returns (QueryDefenseReply)
+	get /query/scholar/:id (QueryDefenseReq) returns (QueryDefenseReply)
 	
 	@handler queryDefense
-	get /schedule/defense/query/id/:id (QueryDefenseReq) returns (Defense)
+	get /query/id/:id (QueryDefenseReq) returns (Defense)
 	
 	@handler queryAllDefense
-	get /schedule/defense/query/all returns (QueryDefenseReply)
+	get /query/all returns (QueryDefenseReply)
 	
 	@handler addDefense
-	post /schedule/defense/add (Defense) returns (addDefenseReply)
+	post /add (Defense) returns (addDefenseReply)
 	
 	@handler ModifyDefense
-	post /schedule/defense/modify (ModifyDefenseReq)
+	post /modify (ModifyDefenseReq)
 	
 	@handler RemoveDefense
-	post /schedule/defense/remove (RemoveDefenseReq)
-	
-	@handler QueryAvailableClassrooms
-	get /schedule/defense/available/classroom/:id (QueryAvailableClassroomsReq) returns (QueryAvailableClassroomsResp)
-	
-	@handler QueryAvailableTeachers
-	get /schedule/defense/available/teacher/:id (QueryAvailableTeachersReq) returns (QueryAvailableTeachersResp)
-	
-	@handler QueryAvailable
-	get /schedule/defense/available/all (QueryAvailableReq) returns (QueryAvailableReply)
-	
+	post /remove (RemoveDefenseReq)
 }

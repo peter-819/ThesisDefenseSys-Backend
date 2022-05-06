@@ -14,20 +14,20 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodPost,
-				Path:    "/excel/import/:usage",
+				Path:    "/import/:usage",
 				Handler: ImportHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/excel/preview",
+				Path:    "/preview",
 				Handler: PreviewHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/excel/export/:usage",
+				Path:    "/export/:usage",
 				Handler: ExportHandler(serverCtx),
 			},
 		},
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/excel"),
 	)
 }

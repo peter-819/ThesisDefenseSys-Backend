@@ -12,9 +12,4 @@ type Config struct {
 	StudentRpc   zrpc.RpcClientConf
 	UserRpc      zrpc.RpcClientConf
 	DefenseRpc   zrpc.RpcClientConf
-
-	Auth struct {
-		AccessSecret string
-		AccessExpire int64
-	}
 }

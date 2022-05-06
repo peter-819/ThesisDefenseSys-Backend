@@ -1,10 +1,11 @@
 package main
 
 import (
+	"TDS-backend/common/authx"
+	"TDS-backend/common/errorx"
 	"flag"
 	"fmt"
 	"net/http"
-	"TDS-backend/common/errorx"
 
 	"TDS-backend/teacher/cmd/api/internal/config"
 	"TDS-backend/teacher/cmd/api/internal/handler"
@@ -27,6 +28,7 @@ func main() {
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
 
+	server.Use(authx.NewAuthInfoToCtxMiddleware().Handle)
 	handler.RegisterHandlers(server, ctx)
 
 	httpx.SetErrorHandler(func(err error) (int, interface{}) {

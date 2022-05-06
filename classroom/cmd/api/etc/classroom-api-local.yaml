@@ -2,10 +2,6 @@ Name: Classroom-api
 Host: 0.0.0.0
 Port: 8894
 
-Auth:
-  AccessSecret: TDS-secret-key
-  AccessExpire: 86400
-
 ClassroomRpc:
   Etcd:
     Hosts:

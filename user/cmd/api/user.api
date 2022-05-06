@@ -44,17 +44,34 @@ type (
 type (
 	VerifyTokenReq  struct{}
 	VerifyTokenResp {
-		UserId string `json:"userId"`
-		Ok     bool   `json:"ok"`
+		UserId   string `json:"userId"`
+		UserRole string `json:"userRole"`
+		Ok       bool   `json:"ok"`
 	}
 )
 
+//expose login without jwt
 service user-api {
 	@handler login
-	post /user/login (LoginReq) returns (LoginReply)
-	
+	post /login (LoginReq) returns (LoginReply)
+}
+
+@server (
+	prefix: user
+)
+service user-api {
+	//deprecated
 	@handler register
-	post /user/register (RegisterReq) returns (RegisterReply)
+	post /register (RegisterReq) returns (RegisterReply)
+	
+	@handler SetSecretary
+	post /set/secretary (SetSecretaryReq)
+	
+	@handler GetUserInfo
+	get /query/id/:id (QueryUserReq) returns (UserInfo)
+	
+	@handler GetTeachers
+	get /query/teachers returns (QueryUsersResp)
 }
 
 @server(
@@ -62,14 +79,5 @@ service user-api {
 )
 service user-api {
 	@handler VerifyToken
-	get /user/verify/token (VerifyTokenReq) returns (VerifyTokenResp)
-	
-	@handler SetSecretary
-	post /user/set/secretary (SetSecretaryReq)
-	
-	@handler GetUserInfo
-	get /user/query/id/:id (QueryUserReq) returns (UserInfo)
-	
-	@handler GetTeachers
-	get /user/query/teachers returns (QueryUsersResp)
+	get /verify/token (VerifyTokenReq) returns (VerifyTokenResp)
 }

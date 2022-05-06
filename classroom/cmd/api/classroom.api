@@ -24,15 +24,15 @@ type (
 )
 
 @server(
-	jwt: Auth
+	prefix: classroom
 )
 service Classroom-api {
 	@handler QueryAllClassrooms
-	get /classroom/query/all returns (QueryClassroomsReply)
+	get /query/all returns (QueryClassroomsReply)
 	
 	@handler QueryClassroom
-	get /classroom/query/:id (QueryClassroomReq) returns (Classroom)
+	get /query/:id (QueryClassroomReq) returns (Classroom)
 	
 	@handler RemoveClassroom
-	get /classroom/remove/:id (RemoveClassroomReq)
+	get /remove/:id (RemoveClassroomReq)
 }

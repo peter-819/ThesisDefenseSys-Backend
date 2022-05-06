@@ -31,12 +31,12 @@ type (
 )
 
 @server(
-	jwt: Auth
+	prefix: route
 )
 service route-api {
 	@handler routemenu
-	get /route/menu returns (RouteMenuReply)
+	get /menu returns (RouteMenuReply)
 	
 	@handler routeheader
-	get /route/header (HeaderReq) returns (HeaderReply)
+	get /header (HeaderReq) returns (HeaderReply)
 }

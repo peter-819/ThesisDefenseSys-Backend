@@ -14,25 +14,25 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodGet,
-				Path:    "/student/query/all",
+				Path:    "/query/all",
 				Handler: QueryAllStudentsHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/student/query/nondefensed",
+				Path:    "/query/nondefensed",
 				Handler: QueryNondefensedStudentsHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/student/remove",
+				Path:    "/remove",
 				Handler: RemoveStudentHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/student/query/id/:id",
+				Path:    "/query/id/:id",
 				Handler: QueryStudentHandler(serverCtx),
 			},
 		},
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/student"),
 	)
 }

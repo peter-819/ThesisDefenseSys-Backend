@@ -14,20 +14,20 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodGet,
-				Path:    "/teacher/query/:id",
+				Path:    "/query/:id",
 				Handler: QueryTeacherHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/teacher/modify",
+				Path:    "/modify",
 				Handler: ModifyTeacherHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/teacher/query/all",
+				Path:    "/query/all",
 				Handler: QueryAllTeachersHandler(serverCtx),
 			},
 		},
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/teacher"),
 	)
 }

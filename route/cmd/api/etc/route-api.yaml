@@ -4,6 +4,3 @@ Port: 8890
 Mongodb:
   DataSource: mongodb://jeromeguan:guanhaobo123@mongo:27017/TDS?connect=direct&authSource=admin&authMechanism=SCRAM-SHA-256
   DatabaseName: TDS
-Auth:
-  AccessSecret: TDS-secret-key
-  AccessExpire: 86400

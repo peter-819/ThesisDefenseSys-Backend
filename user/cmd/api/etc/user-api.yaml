@@ -14,3 +14,33 @@ UserRpc:
 Auth:
   AccessSecret: TDS-secret-key
   AccessExpire: 86400
+
+AdminUrls:
+  - "/user/set/"
+  - "/user/query/"
+  - "/user/register"
+  - "/excel/import/user"
+
+SecretaryUrls:
+  - "/excel/"
+  - "/classroom/query/all"
+  - "/classroom/remove/"
+  - "/defense/add"
+  - "/defense/modify"
+  - "/defense/query/all"
+  - "/defense/remove"
+  - "/student/query/all"
+  - "/student/query/nondefensed"
+  - "/student/remove"
+  - "/teacher/modify"
+  - "/teacher/query/all"
+
+TeacherUrls:
+  - "/teacher/query/"
+
+StudentUrls:
+  - "/student/query/"
+  - "/query/scholar/"
+
+AnyoneUrls:
+  - "/route/"

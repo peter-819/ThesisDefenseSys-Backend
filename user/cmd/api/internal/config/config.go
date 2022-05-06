@@ -16,4 +16,9 @@ type Config struct {
 		AccessSecret string
 		AccessExpire int64
 	}
+	AdminUrls     []string
+	SecretaryUrls []string
+	TeacherUrls   []string
+	StudentUrls   []string
+	AnyoneUrls    []string
 }

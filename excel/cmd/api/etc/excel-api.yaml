@@ -2,10 +2,6 @@ Name: Excel-api
 Host: 0.0.0.0
 Port: 8896
 
-Auth:
-  AccessSecret: TDS-secret-key
-  AccessExpire: 86400
-
 ClassroomRpc:
   Etcd:
     Hosts:

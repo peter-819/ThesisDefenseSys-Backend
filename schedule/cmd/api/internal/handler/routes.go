@@ -14,50 +14,35 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodGet,
-				Path:    "/schedule/defense/query/scholar/:id",
+				Path:    "/query/scholar/:id",
 				Handler: queryDefenseTeacherStudentHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/schedule/defense/query/id/:id",
+				Path:    "/query/id/:id",
 				Handler: queryDefenseHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/schedule/defense/query/all",
+				Path:    "/query/all",
 				Handler: queryAllDefenseHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/schedule/defense/add",
+				Path:    "/add",
 				Handler: addDefenseHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/schedule/defense/modify",
+				Path:    "/modify",
 				Handler: ModifyDefenseHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/schedule/defense/remove",
+				Path:    "/remove",
 				Handler: RemoveDefenseHandler(serverCtx),
 			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/schedule/defense/available/classroom/:id",
-				Handler: QueryAvailableClassroomsHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/schedule/defense/available/teacher/:id",
-				Handler: QueryAvailableTeachersHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/schedule/defense/available/all",
-				Handler: QueryAvailableHandler(serverCtx),
-			},
 		},
-		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/defense"),
 	)
 }
